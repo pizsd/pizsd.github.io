@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang='zh-CN'>
+
+<head>
+  <meta name="generator" content="Hexo 6.2.0">
+  <meta charset="utf-8">
+  
+
+  <meta http-equiv='x-dns-prefetch-control' content='on' />
+  <link rel='dns-prefetch' href='https://fastly.jsdelivr.net'>
+  <link rel="preconnect" href="https://fastly.jsdelivr.net" crossorigin>
+  <link rel='dns-prefetch' href='//unpkg.com'>
+
+  <meta name="renderer" content="webkit">
+  <meta name="force-rendering" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  <meta name="HandheldFriendly" content="True" >
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="theme-color" content="#f8f8f8">
+  <title>Go：Golang中那些“奇怪”的注释 - 林曦</title>
+
+  
+    <meta name="description" content="1. 常规注释每种开发语言都有自己的注释语法和格式，也大多类似。 Go 语言和市面上其它多种高级语言的注释语法也类似，主要有以下两种语法格式:  注释行 以符合 &#x2F;&#x2F; 开头 注释块 以符号 &#x2F;* 注释内容 *&#x2F; 包括  但是，以上也就仅仅是正常情况。在很多特殊情况下，一些看似符合以上注释语法的地方，却不是注释，也是本文整理的重点。 2. “奇怪”的注释 条件编译标签  1&#x2F;&#x2F; +build lin">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Golang中那些“奇怪”的注释">
+<meta property="og:url" content="https://pizsd.github.io/wiki/go/go_tag.html">
+<meta property="og:site_name" content="林曦">
+<meta property="og:description" content="1. 常规注释每种开发语言都有自己的注释语法和格式，也大多类似。 Go 语言和市面上其它多种高级语言的注释语法也类似，主要有以下两种语法格式:  注释行 以符合 &#x2F;&#x2F; 开头 注释块 以符号 &#x2F;* 注释内容 *&#x2F; 包括  但是，以上也就仅仅是正常情况。在很多特殊情况下，一些看似符合以上注释语法的地方，却不是注释，也是本文整理的重点。 2. “奇怪”的注释 条件编译标签  1&#x2F;&#x2F; +build lin">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-09-27T07:16:21.621Z">
+<meta property="article:modified_time" content="2022-09-27T07:16:21.621Z">
+<meta property="article:author" content="pizsd">
+<meta property="article:tag" content="Go">
+<meta name="twitter:card" content="summary">
+  
+  
+
+  <!-- feed -->
+  
+
+  
+    
+<link rel="stylesheet" href="/css/main.css">
+
+  
+
+  
+
+  
+</head>
+
+<body>
+  
+
+
+
+
+  <div class='l_body' id='start'>
+    <aside class='l_left' layout='wiki'>
+    
+
+
+<header class="header">
+
+<div class="logo-wrap wiki"><a style="filter: grayscale(100%)" class="wiki-home cap" href="/"><svg aria-hidden="true" viewBox="0 0 16 16" width="1rem" height="1rem" fill="currentColor"><path fill-rule="evenodd" d="M7.78 12.53a.75.75 0 01-1.06 0L2.47 8.28a.75.75 0 010-1.06l4.25-4.25a.75.75 0 011.06 1.06L4.81 7h7.44a.75.75 0 010 1.5H4.81l2.97 2.97a.75.75 0 010 1.06z"></path></svg>所有项目</a><a class="title" href="/wiki/go/index.html"><div class="main">Golang</div><div class="sub cap">🐶世界上第二好的语言🐶</div></a></div>
+</header>
+
+<div class="widgets">
+
+<div class="widget-wrap multi" id="toc"><div class="widget-header cap dis-select"><span class="name">基础知识踩坑</span></div><div class="widget-body fs14"><div class="doc-tree"><a class="doc-tree-link" href="/wiki/go/index.html"><span class="toc-text">Golang中的断言</span></a></div><div class="doc-tree active"><a class="doc-tree-link active" href="/wiki/go/go_tag.html"><span class="toc-text">Golang中那些“奇怪”的注释</span></a><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E5%B8%B8%E8%A7%84%E6%B3%A8%E9%87%8A"><span class="toc-text">1. 常规注释</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E2%80%9C%E5%A5%87%E6%80%AA%E2%80%9D%E7%9A%84%E6%B3%A8%E9%87%8A"><span class="toc-text">2. “奇怪”的注释</span></a></li></ol></div></div></div>
+
+
+
+
+</div>
+
+
+    </aside>
+    <div class='l_main'>
+      
+
+      
+
+  
+  
+<div class="bread-nav fs12"><div id="breadcrumb"><a class="cap breadcrumb" id="home" href="/">主页</a><span class="sep"></span><a class="cap breadcrumb" id="menu" href="/wiki/">WIKI</a><span class="sep"></span><a class="cap breadcrumb" id="proj" href="/wiki/go/index.html">Golang</a></div><div id="post-meta">更新于&nbsp;<time datetime="2022-09-27T07:16:21.621Z">2022-09-27</time></div></div>
+
+  <article class='content md wiki'>
+  <h1 class="article-title"><span>Golang中那些“奇怪”的注释</span></h1>
+  <h2 id="1-常规注释"><a href="#1-常规注释" class="headerlink" title="1. 常规注释"></a>1. 常规注释</h2><p>每种开发语言都有自己的注释语法和格式，也大多类似。 Go 语言和市面上其它多种高级语言的注释语法也类似，主要有以下两种语法格式:</p>
+<ul>
+<li>注释行 以符合 <code>//</code> 开头</li>
+<li>注释块 以符号 <code>/* 注释内容 */</code> 包括</li>
+</ul>
+<p>但是，以上也就仅仅是正常情况。在很多特殊情况下，一些看似符合以上注释语法的地方，却不是注释，也是本文整理的重点。</p>
+<h2 id="2-“奇怪”的注释"><a href="#2-“奇怪”的注释" class="headerlink" title="2. “奇怪”的注释"></a>2. “奇怪”的注释</h2><ul>
+<li>条件编译标签</li>
+</ul>
+<figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// +build linux,386 darwin,!cgo [条件编译组合结果是： (linux AND 386) OR (darwin AND (NOT cgo))]</span></span><br></pre></td></tr></table></figure>
+<p>在一些特殊的 Go 代码实现文件中，可以看到 <code>// +build</code> 开头的注释，而且此类 Go 代码实现中的函数常常还会在其它类似的文件中出现不同的实现。此类注释，称之为条件编译标签。它有明显的特征，即单独一行或多行，均以<code>// +build</code>开头，同时和其它代码或者注释之间通过空行隔开。</p>
+<ul>
+<li>二进制包</li>
+</ul>
+<figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//go:binary-only-package</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">package</span> mypkg</span><br></pre></td></tr></table></figure>
+
+<p>同条件编译标签类似，同样需要与其它代码或者注释之间通过空行隔开。但是注释为固定內容： <code>//go:binary-only-package</code>时（注意没有空格），代表代码中直接引用二进制包。二进制包的位于：$GOPATH&#x2F;pkg&#x2F;路徑下。</p>
+<ul>
+<li>代码生成</li>
+</ul>
+<p>在 Go 项目中，常常会看到很多符合这样的正则表达式的注释内容</p>
+<figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">^<span class="comment">// Code generated .* DO NOT EDIT\.$</span></span><br></pre></td></tr></table></figure>
+<p>即表示该 Go 代码文件是通过工具自动化生成的，不可修改。实现 Go 代码文件的自动生成的方法很多，工具也有很多。常见工具有：<code>protoc</code> + <code>protoc-gen-go</code> 组合，以及 <code>stringer</code> 工具等等。</p>
+<p>熟悉 <code>go tool</code> 工具中的 <code>generate</code> 的话， 可以直接通过以下注释格式的方式，将生成代码的具体命令操作，写在 Go 代码文件中。例如：</p>
+<figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//go:generate command argument...</span></span><br></pre></td></tr></table></figure>
+
+<p>这样在执行 <code>go generate</code> 命令时，该命令会自动检索 Go 代码文件中的注释指令，并依次执行，如有多条指令的话。</p>
+<ul>
+<li>Cgo代码块</li>
+</ul>
+<figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">#include &lt;stdio.h&gt;</span></span><br><span class="line"><span class="comment">#include &lt;stdlib.h&gt;</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">void myprint(char* s) &#123;</span></span><br><span class="line"><span class="comment">	printf(&quot;%s\n&quot;, s);</span></span><br><span class="line"><span class="comment">&#125;</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;C&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>即，一个注释块中的内容是 C 代码，同时，注释块结束后，马上是import “C”则代表该 Go 代码中引用 C 代码，其中注释块中的内容就是具体的 C 代码。 C 代码可以是简单头文件引用，也可以是具体的实现代码。</p>
+<p>其中，在 <code>Cgo</code> 的代码块中，与纯 C 代码稍微不同的是， Cgo 代码中还可以加入#cgo开头的注释：</p>
+<figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">#cgo CFLAGS: -I .</span></span><br><span class="line"><span class="comment">#cgo LDFLAGS: -L . -lclibrary</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">#include &quot;clibrary.h&quot;</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">int callOnMeGo_cgo(int in); // Forward declaration.</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;C&quot;</span></span><br></pre></td></tr></table></figure>
+<p>其中，<code>#cgo</code>开头的行作用是指定具体 C 代码的编译链接参数。</p>
+<ul>
+<li>官方包中的特殊注释</li>
+</ul>
+<figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//go:embed hello.txt</span></span><br><span class="line"><span class="keyword">var</span> s <span class="type">string</span></span><br><span class="line"><span class="built_in">print</span>(s)</span><br></pre></td></tr></table></figure>
+
+<p>官方文档给出的解释：<br>Go source files that import “embed” can use the &#x2F;&#x2F;go:embed directive to initialize a variable of type string, []byte, or FS with the contents of files read from the package directory or subdirectories at compile time.<br>导入 “embed “的Go源代码文件可以使用&#x2F;&#x2F;go:embed指令，用编译时从包目录或子目录中读取的文件内容来初始化一个 <code>string</code>、<code>[]byte</code>或 <code>FS</code> 类型的变量。</p>
+
+  
+
+
+  </article>
+  
+<br>
+
+  
+
+
+
+
+      
+<footer class="page-footer reveal fs12"><hr><div class="sitemap"><div class="sitemap-group"><span class="fs14">博客</span><a href="/">近期</a><a href="/archives/">归档</a></div><div class="sitemap-group"><span class="fs14">WIKI</span><a href="/wiki/php/">PHP</a><a href="/wiki/go/">GO</a></div><div class="sitemap-group"><span class="fs14">关于</span><a href="/about/">关于本站</a></div></div><div class="text"><p>本博客所有文章除特别声明外，均采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处。</p>
+<p>本站由 <a href="https://pizsd.github.io/">@pizsd</a> 创建，使用 <a target="_blank" rel="noopener" href="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.8.0" title="v1.8.0">Stellar</a> 作为主题。</p>
+</div></footer>
+
+      <div class='float-panel mobile-only blur' style='display:none'>
+  <button type='button' class='sidebar-toggle mobile' onclick='sidebar.toggle()'>
+    <svg class="icon" style="width: 1em; height: 1em;vertical-align: middle;fill: currentColor;overflow: hidden;" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="15301"><path d="M566.407 808.3c26.9-0.1 49.3-20.8 51.6-47.6-1.9-27.7-23.9-49.7-51.6-51.6h-412.6c-28.2-1.4-52.6 19.5-55.5 47.6 2.3 26.8 24.6 47.5 51.6 47.6h416.5v4z m309.3-249.9c26.9-0.1 49.3-20.8 51.6-47.6-2.2-26.8-24.6-47.5-51.6-47.6h-721.9c-27.7-2.8-52.5 17.4-55.3 45.1-0.1 0.8-0.1 1.7-0.2 2.5 0.9 27.2 23.6 48.5 50.7 47.6H875.707z m-103.1-245.9c26.9-0.1 49.3-20.8 51.6-47.6-0.4-28.3-23.2-51.1-51.5-51.6h-618.9c-29.5-1.1-54.3 21.9-55.5 51.4v0.2c1.4 27.8 25.2 49.2 53 47.8 0.8 0 1.7-0.1 2.5-0.2h618.8z" p-id="15302"></path><path d="M566.407 808.3c26.9-0.1 49.3-20.8 51.6-47.6-1.9-27.7-23.9-49.7-51.6-51.6h-412.6c-28.2-1.4-52.6 19.5-55.5 47.6 1.9 27.7 23.9 49.7 51.6 51.6h416.5z m309.3-249.9c26.9-0.1 49.3-20.8 51.6-47.6-2.2-26.8-24.6-47.5-51.6-47.6h-721.9c-27.7-2.8-52.5 17.4-55.3 45.1-0.1 0.8-0.1 1.7-0.2 2.5 0.9 27.2 23.6 48.5 50.7 47.6H875.707z m-103.1-245.9c26.9-0.1 49.3-20.8 51.6-47.6-0.4-28.3-23.2-51.1-51.5-51.6h-618.9c-29.5-1.1-54.3 21.9-55.5 51.4v0.2c1.4 27.8 25.2 49.2 53 47.8 0.8 0 1.7-0.1 2.5-0.2h618.8z" p-id="15303"></path></svg>
+  </button>
+</div>
+
+    </div>
+  </div>
+  <div class='scripts'>
+    <script type="text/javascript">
+  stellar = {
+    // 懒加载 css https://github.com/filamentgroup/loadCSS
+    loadCSS: (href, before, media, attributes) => {
+      var doc = window.document;
+      var ss = doc.createElement("link");
+      var ref;
+      if (before) {
+        ref = before;
+      } else {
+        var refs = (doc.body || doc.getElementsByTagName("head")[0]).childNodes;
+        ref = refs[refs.length - 1];
+      }
+      var sheets = doc.styleSheets;
+      if (attributes) {
+        for (var attributeName in attributes) {
+          if (attributes.hasOwnProperty(attributeName)) {
+            ss.setAttribute(attributeName, attributes[attributeName]);
+          }
+        }
+      }
+      ss.rel = "stylesheet";
+      ss.href = href;
+      ss.media = "only x";
+      function ready(cb) {
+        if (doc.body) {
+          return cb();
+        }
+        setTimeout(function () {
+          ready(cb);
+        });
+      }
+      ready(function () {
+        ref.parentNode.insertBefore(ss, before ? ref : ref.nextSibling);
+      });
+      var onloadcssdefined = function (cb) {
+        var resolvedHref = ss.href;
+        var i = sheets.length;
+        while (i--) {
+          if (sheets[i].href === resolvedHref) {
+            return cb();
+          }
+        }
+        setTimeout(function () {
+          onloadcssdefined(cb);
+        });
+      };
+      function loadCB() {
+        if (ss.addEventListener) {
+          ss.removeEventListener("load", loadCB);
+        }
+        ss.media = media || "all";
+      }
+      if (ss.addEventListener) {
+        ss.addEventListener("load", loadCB);
+      }
+      ss.onloadcssdefined = onloadcssdefined;
+      onloadcssdefined(loadCB);
+      return ss;
+    },
+
+    // 从 butterfly 和 volantis 获得灵感
+    loadScript: (src, opt) => new Promise((resolve, reject) => {
+      var script = document.createElement('script');
+      script.src = src;
+      if (opt) {
+        for (let key of Object.keys(opt)) {
+          script[key] = opt[key]
+        }
+      } else {
+        // 默认异步，如果需要同步，第二个参数传入 {} 即可
+        script.async = true
+      }
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    }),
+
+    // https://github.com/jerryc127/hexo-theme-butterfly
+    jQuery: (fn) => {
+      if (typeof jQuery === 'undefined') {
+        stellar.loadScript(stellar.plugins.jQuery).then(fn)
+      } else {
+        fn()
+      }
+    }
+  };
+  stellar.github = 'https://github.com/xaoxuu/hexo-theme-stellar/tree/1.8.0';
+  stellar.config = {
+    date_suffix: {
+      just: '刚刚',
+      min: '分钟前',
+      hour: '小时前',
+      day: '天前',
+      month: '个月前',
+    },
+  };
+
+  // required plugins (only load if needs)
+  stellar.plugins = {
+    jQuery: 'https://fastly.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js',
+    sitesjs: '/js/plugins/sites.js',
+    friendsjs: '/js/plugins/friends.js',
+  };
+
+  // optional plugins
+  if ('true' == 'true') {
+    stellar.plugins.lazyload = Object.assign({"enable":true,"js":"https://fastly.jsdelivr.net/npm/vanilla-lazyload@17.3.1/dist/lazyload.min.js","transition":"blur"});
+  }
+  if ('true' == 'true') {
+    stellar.plugins.swiper = Object.assign({"enable":true,"css":"https://unpkg.com/swiper@6/swiper-bundle.min.css","js":"https://unpkg.com/swiper@6/swiper-bundle.min.js"});
+  }
+  if ('' == 'true') {
+    stellar.plugins.scrollreveal = Object.assign({"enable":null,"js":"https://fastly.jsdelivr.net/npm/scrollreveal@4.0.9/dist/scrollreveal.min.js","distance":"8px","duration":500,"interval":100,"scale":1});
+  }
+  if ('true' == 'true') {
+    stellar.plugins.preload = Object.assign({"enable":true,"service":"flying_pages","instant_page":"https://fastly.jsdelivr.net/gh/volantis-x/cdn-volantis@4.1.2/js/instant_page.js","flying_pages":"https://fastly.jsdelivr.net/gh/gijo-varghese/flying-pages@2.1.2/flying-pages.min.js"});
+  }
+  if ('true' == 'true') {
+    stellar.plugins.fancybox = Object.assign({"enable":true,"js":"https://fastly.jsdelivr.net/npm/@fancyapps/ui@4.0/dist/fancybox.umd.js","css":"https://fastly.jsdelivr.net/npm/@fancyapps/ui@4.0/dist/fancybox.css","selector":".swiper-slide img"});
+  }
+  if ('false' == 'true') {
+    stellar.plugins.heti = Object.assign({"enable":false,"css":"https://unpkg.com/heti/umd/heti.min.css","js":"https://unpkg.com/heti/umd/heti-addon.min.js"});
+  }
+</script>
+
+<!-- required -->
+
+  
+<script src="/js/main.js" async></script>
+
+
+
+<!-- optional -->
+
+
+
+<!-- inject -->
+
+
+  </div>
+</body>
+</html>
