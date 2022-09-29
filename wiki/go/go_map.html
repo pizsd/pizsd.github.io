@@ -18,18 +18,18 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="theme-color" content="#f8f8f8">
-  <title>Go：Golang中的断言 - 林曦</title>
+  <title>Go：Golang中Map的声明与使用 - 林曦</title>
 
   
-    <meta name="description" content="在学习Golang过程中遇到1_data :&#x3D; data.(*VerifyCodePhoneRequest) 语法，感觉很迷惑，不清楚具体意思,通过查询资料得到解释，记录下，加深记忆 断言语法 类型动态转换&#x2F;查询（只有对接口对象才能执行类型动态转换&#x2F;查询）[这个可能不太准确] 实际上是golang中的类型断言 还有另外一种写法：1_data,ok :&#x3D; data.(*Verif">
+    <meta name="description" content="声明 Map 声明使用 var 关键字  1var m map[string]string  使用 这里先提前说明一点，Map 在声明以后的初始值是空map ，是无法进行赋值操作的，否则编译报错 panic: assignment to entry in nil map，这里意思就是：给空 Map 赋值   需要先进行 make 进行内存分配才能进行赋值操作，Golang还有chan、map 以及">
 <meta property="og:type" content="website">
-<meta property="og:title" content="Golang中的断言">
-<meta property="og:url" content="https://pizsd.github.io/wiki/go/index.html">
+<meta property="og:title" content="Golang中Map的声明与使用">
+<meta property="og:url" content="https://pizsd.github.io/wiki/go/go_map.html">
 <meta property="og:site_name" content="林曦">
-<meta property="og:description" content="在学习Golang过程中遇到1_data :&#x3D; data.(*VerifyCodePhoneRequest) 语法，感觉很迷惑，不清楚具体意思,通过查询资料得到解释，记录下，加深记忆 断言语法 类型动态转换&#x2F;查询（只有对接口对象才能执行类型动态转换&#x2F;查询）[这个可能不太准确] 实际上是golang中的类型断言 还有另外一种写法：1_data,ok :&#x3D; data.(*Verif">
+<meta property="og:description" content="声明 Map 声明使用 var 关键字  1var m map[string]string  使用 这里先提前说明一点，Map 在声明以后的初始值是空map ，是无法进行赋值操作的，否则编译报错 panic: assignment to entry in nil map，这里意思就是：给空 Map 赋值   需要先进行 make 进行内存分配才能进行赋值操作，Golang还有chan、map 以及">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2022-09-27T07:12:21.500Z">
-<meta property="article:modified_time" content="2022-09-27T07:12:21.500Z">
+<meta property="article:published_time" content="2022-09-29T08:45:38.549Z">
+<meta property="article:modified_time" content="2022-09-29T08:45:38.549Z">
 <meta property="article:author" content="pizsd">
 <meta property="article:tag" content="Go">
 <meta name="twitter:card" content="summary">
@@ -68,7 +68,7 @@
 
 <div class="widgets">
 
-<div class="widget-wrap multi" id="toc"><div class="widget-header cap dis-select"><span class="name">基础知识踩坑</span></div><div class="widget-body fs14"><div class="doc-tree active"><a class="doc-tree-link active" href="/wiki/go/index.html"><span class="toc-text">Golang中的断言</span></a><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%A8%E5%AD%A6%E4%B9%A0Golang%E8%BF%87%E7%A8%8B%E4%B8%AD%E9%81%87%E5%88%B0"><span class="toc-text">在学习Golang过程中遇到</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%AD%E8%A8%80%E8%AF%AD%E6%B3%95"><span class="toc-text">断言语法</span></a></li></ol></div><div class="doc-tree"><a class="doc-tree-link" href="/wiki/go/go_tag.html"><span class="toc-text">Golang中那些“奇怪”的注释</span></a></div><div class="doc-tree"><a class="doc-tree-link" href="/wiki/go/go_map.html"><span class="toc-text">Golang中Map的声明与使用</span></a></div></div></div>
+<div class="widget-wrap multi" id="toc"><div class="widget-header cap dis-select"><span class="name">基础知识踩坑</span></div><div class="widget-body fs14"><div class="doc-tree"><a class="doc-tree-link" href="/wiki/go/index.html"><span class="toc-text">Golang中的断言</span></a></div><div class="doc-tree"><a class="doc-tree-link" href="/wiki/go/go_tag.html"><span class="toc-text">Golang中那些“奇怪”的注释</span></a></div><div class="doc-tree active"><a class="doc-tree-link active" href="/wiki/go/go_map.html"><span class="toc-text">Golang中Map的声明与使用</span></a><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A3%B0%E6%98%8E"><span class="toc-text">声明</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8"><span class="toc-text">使用</span></a></li></ol></div></div></div>
 
 
 
@@ -84,25 +84,38 @@
 
   
   
-<div class="bread-nav fs12"><div id="breadcrumb"><a class="cap breadcrumb" id="home" href="/">主页</a><span class="sep"></span><a class="cap breadcrumb" id="menu" href="/wiki/">WIKI</a><span class="sep"></span><a class="cap breadcrumb" id="proj" href="/wiki/go/index.html">Golang</a></div><div id="post-meta">更新于&nbsp;<time datetime="2022-09-27T07:12:21.500Z">2022-09-27</time></div></div>
+<div class="bread-nav fs12"><div id="breadcrumb"><a class="cap breadcrumb" id="home" href="/">主页</a><span class="sep"></span><a class="cap breadcrumb" id="menu" href="/wiki/">WIKI</a><span class="sep"></span><a class="cap breadcrumb" id="proj" href="/wiki/go/index.html">Golang</a></div><div id="post-meta">更新于&nbsp;<time datetime="2022-09-29T08:45:38.549Z">2022-09-29</time></div></div>
 
   <article class='content md wiki'>
-  <h1 class="article-title"><span>Golang中的断言</span></h1>
-  <h3 id="在学习Golang过程中遇到"><a href="#在学习Golang过程中遇到" class="headerlink" title="在学习Golang过程中遇到"></a>在学习Golang过程中遇到</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">_data := data.(*VerifyCodePhoneRequest)</span><br></pre></td></tr></table></figure>
-<p>语法，感觉很迷惑，不清楚具体意思,通过查询资料得到解释，记录下，加深记忆</p>
-<h3 id="断言语法"><a href="#断言语法" class="headerlink" title="断言语法"></a>断言语法</h3><ul>
-<li>类型动态转换&#x2F;查询（只有对接口对象才能执行类型动态转换&#x2F;查询）[这个可能不太准确]</li>
-<li>实际上是golang中的类型断言</li>
-<li>还有另外一种写法：<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">_data,ok := data.(*VerifyCodePhoneRequest)</span><br></pre></td></tr></table></figure></li>
-<li>表示对<code>data</code>进行断言，如果断言成功，将接口返回给_data,并且<code>ok</code>为<code>true</code>，否则<code>ok</code>为<code>false</code></li>
+  <h1 class="article-title"><span>Golang中Map的声明与使用</span></h1>
+  <h3 id="声明"><a href="#声明" class="headerlink" title="声明"></a>声明</h3><ul>
+<li><code>Map</code> 声明使用 <code>var</code> 关键字</li>
 </ul>
+<figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> m <span class="keyword">map</span>[<span class="type">string</span>]<span class="type">string</span></span><br></pre></td></tr></table></figure>
 
+<h3 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h3><blockquote>
+<p>这里先提前说明一点，<code>Map</code> 在声明以后的初始值是空map ，是无法进行赋值操作的，否则编译报错 <code>panic: assignment to entry in nil map</code>，这里意思就是：给空 <code>Map</code> 赋值</p>
+</blockquote>
+<ul>
+<li>需要先进行 <code>make</code> 进行内存分配才能进行赋值操作，Golang还有chan、map 以及 slice 这三种数据类型也许进行 <code>make</code> 进行分配内存</li>
+</ul>
+<figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">m = <span class="built_in">make</span>(<span class="keyword">map</span>[<span class="type">string</span>]<span class="type">string</span>)</span><br><span class="line"><span class="comment">// 或者使用简短声明</span></span><br><span class="line">m1 := <span class="built_in">make</span>(<span class="keyword">map</span>[<span class="type">string</span>]<span class="type">string</span>)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>赋值</li>
+</ul>
+<figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">m[<span class="string">&quot;haha&quot;</span>] = <span class="string">&quot;haha&quot;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>判断</li>
+</ul>
+<figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 判断键是否存在map中，如果存早将键值赋值给v，true赋值给ok，不存在正相反</span></span><br><span class="line"><span class="keyword">if</span> v, ok := m[<span class="string">&quot;haha&quot;</span>]; ok &#123;</span><br><span class="line">    fmt.Println(v, ok)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
   
 
 
   </article>
   
-<div class="related-wrap reveal" id="read-next"><section class="header cap theme"><span>接下来阅读</span></section><section class="body fs14"><a id="next" href="/wiki/go/go_tag.html">Golang中那些“奇怪”的注释<span class="note">下一篇</span></a><div class="line"></div></section></div>
+<br>
 
   
 
