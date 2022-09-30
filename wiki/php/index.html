@@ -18,18 +18,18 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="theme-color" content="#f8f8f8">
-  <title>PHP：Hello PHP - 林曦</title>
+  <title>PHP：PHP静态闭包和非静态闭包之间的差异 - 林曦</title>
 
   
-    <meta name="description" content="PHP hello world!">
+    <meta name="description" content="非静态闭包12345678910111213141516171819202122232425&lt;?phpclass Foo &amp;#123;        protected $array;        public function __construct() &amp;#123;        $this-&gt;array &#x3D; array_fill(0, 2000, 17);        &amp;#1">
 <meta property="og:type" content="website">
-<meta property="og:title" content="Hello PHP">
+<meta property="og:title" content="PHP静态闭包和非静态闭包之间的差异">
 <meta property="og:url" content="https://pizsd.github.io/wiki/php/index.html">
 <meta property="og:site_name" content="林曦">
-<meta property="og:description" content="PHP hello world!">
+<meta property="og:description" content="非静态闭包12345678910111213141516171819202122232425&lt;?phpclass Foo &amp;#123;        protected $array;        public function __construct() &amp;#123;        $this-&gt;array &#x3D; array_fill(0, 2000, 17);        &amp;#1">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2022-09-27T05:54:59.898Z">
-<meta property="article:modified_time" content="2022-09-27T05:54:59.898Z">
+<meta property="article:published_time" content="2022-09-30T02:13:22.452Z">
+<meta property="article:modified_time" content="2022-09-30T02:13:22.452Z">
 <meta property="article:author" content="pizsd">
 <meta property="article:tag" content="PHP">
 <meta name="twitter:card" content="summary">
@@ -68,7 +68,7 @@
 
 <div class="widgets">
 
-<div class="widget-wrap single" id="toc"><div class="widget-header cap dis-select"><span class="name">本文目录</span></div><div class="widget-body fs14"><div class="doc-tree active"></div></div></div>
+<div class="widget-wrap multi" id="toc"><div class="widget-header cap dis-select"><span class="name">必须要细啊</span></div><div class="widget-body fs14"><div class="doc-tree active"><a class="doc-tree-link active" href="/wiki/php/index.html"><span class="toc-text">PHP静态闭包和非静态闭包之间的差异</span></a><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9D%9E%E9%9D%99%E6%80%81%E9%97%AD%E5%8C%85"><span class="toc-text">非静态闭包</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9D%99%E6%80%81%E9%97%AD%E5%8C%85"><span class="toc-text">静态闭包</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BB%93%E6%9E%9C"><span class="toc-text">结果</span></a></li></ol></div><div class="doc-tree"><a class="doc-tree-link" href="/wiki/php/run_phpcode.html"><span class="toc-text">PHP中的交互命令行</span></a></div></div></div>
 
 
 
@@ -84,12 +84,20 @@
 
   
   
-<div class="bread-nav fs12"><div id="breadcrumb"><a class="cap breadcrumb" id="home" href="/">主页</a><span class="sep"></span><a class="cap breadcrumb" id="menu" href="/wiki/">WIKI</a><span class="sep"></span><a class="cap breadcrumb" id="proj" href="/wiki/php/index.html">PHP</a></div><div id="post-meta">更新于&nbsp;<time datetime="2022-09-27T05:54:59.898Z">2022-09-27</time></div></div>
+<div class="bread-nav fs12"><div id="breadcrumb"><a class="cap breadcrumb" id="home" href="/">主页</a><span class="sep"></span><a class="cap breadcrumb" id="menu" href="/wiki/">WIKI</a><span class="sep"></span><a class="cap breadcrumb" id="proj" href="/wiki/php/index.html">PHP</a></div><div id="post-meta">更新于&nbsp;<time datetime="2022-09-30T02:13:22.452Z">2022-09-30</time></div></div>
 
   <article class='content md wiki'>
-  <h1 class="article-title"><span>Hello PHP</span></h1>
-  <h1 id="PHP"><a href="#PHP" class="headerlink" title="PHP"></a>PHP</h1><ul>
-<li>hello world!</li>
+  <h1 class="article-title"><span>PHP静态闭包和非静态闭包之间的差异</span></h1>
+  <h3 id="非静态闭包"><a href="#非静态闭包" class="headerlink" title="非静态闭包"></a>非静态闭包</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Foo</span> </span>&#123;</span><br><span class="line">        <span class="keyword">protected</span> <span class="variable">$array</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;<span class="keyword">array</span> = <span class="title function_ invoke__">array_fill</span>(<span class="number">0</span>, <span class="number">2000</span>, <span class="number">17</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">getItemProcessor</span>(<span class="params"></span>): <span class="title">Closure</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">            <span class="comment">// do some processing unrelated to $this</span></span><br><span class="line">        &#125;;</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="variable">$start</span> = <span class="title function_ invoke__">microtime</span>(<span class="literal">true</span>);</span><br><span class="line"><span class="variable">$processors</span> = [];</span><br><span class="line"><span class="keyword">for</span> (<span class="variable">$i</span> = <span class="number">0</span>; <span class="variable">$i</span> &lt; <span class="number">2000</span>; <span class="variable">$i</span>++) &#123;</span><br><span class="line">    <span class="variable">$foo</span> = <span class="keyword">new</span> <span class="title class_">Foo</span>();</span><br><span class="line">    <span class="variable">$processors</span>[] = <span class="variable">$foo</span>-&gt;<span class="title function_ invoke__">getItemProcessor</span>();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="variable">$memory</span> = <span class="title function_ invoke__">memory_get_usage</span>() &gt;&gt; <span class="number">20</span>;</span><br><span class="line"><span class="variable">$time</span> = (<span class="title function_ invoke__">microtime</span>(<span class="literal">true</span>) - <span class="variable">$start</span>) * <span class="number">1000</span>;</span><br><span class="line"><span class="title function_ invoke__">printf</span>(<span class="string">&quot;This took %dms and %dMB of memory\n&quot;</span>, <span class="variable">$time</span>, <span class="variable">$memory</span>);</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>执行结果：This took 77ms and 135MB of memory</p>
+</blockquote>
+<h3 id="静态闭包"><a href="#静态闭包" class="headerlink" title="静态闭包"></a>静态闭包</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Foo</span> </span>&#123;</span><br><span class="line">        <span class="keyword">protected</span> <span class="variable">$array</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;<span class="keyword">array</span> = <span class="title function_ invoke__">array_fill</span>(<span class="number">0</span>, <span class="number">2000</span>, <span class="number">17</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">getItemProcessor</span>(<span class="params"></span>): <span class="title">Closure</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">static</span> <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">            <span class="comment">// do some processing unrelated to $this</span></span><br><span class="line">        &#125;;</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="variable">$start</span> = <span class="title function_ invoke__">microtime</span>(<span class="literal">true</span>);</span><br><span class="line"><span class="variable">$processors</span> = [];</span><br><span class="line"><span class="keyword">for</span> (<span class="variable">$i</span> = <span class="number">0</span>; <span class="variable">$i</span> &lt; <span class="number">2000</span>; <span class="variable">$i</span>++) &#123;</span><br><span class="line">    <span class="variable">$foo</span> = <span class="keyword">new</span> <span class="title class_">Foo</span>();</span><br><span class="line">    <span class="variable">$processors</span>[] = <span class="variable">$foo</span>-&gt;<span class="title function_ invoke__">getItemProcessor</span>();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="variable">$memory</span> = <span class="title function_ invoke__">memory_get_usage</span>() &gt;&gt; <span class="number">20</span>;</span><br><span class="line"><span class="variable">$time</span> = (<span class="title function_ invoke__">microtime</span>(<span class="literal">true</span>) - <span class="variable">$start</span>) * <span class="number">1000</span>;</span><br><span class="line"><span class="title function_ invoke__">printf</span>(<span class="string">&quot;This took %dms and %dMB of memory\n&quot;</span>, <span class="variable">$time</span>, <span class="variable">$memory</span>);</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>执行结果：This took 29ms and 2MB of memory</p>
+</blockquote>
+<h3 id="结果"><a href="#结果" class="headerlink" title="结果"></a>结果</h3><ul>
+<li>不管是在时间还是内存占用上用 <code>static</code> 修饰的闭包都要比未修饰的闭包要更好</li>
 </ul>
 
   
@@ -97,7 +105,7 @@
 
   </article>
   
-<br>
+<div class="related-wrap reveal" id="read-next"><section class="header cap theme"><span>接下来阅读</span></section><section class="body fs14"><a id="next" href="/wiki/php/run_phpcode.html">PHP中的交互命令行<span class="note">下一篇</span></a><div class="line"></div></section></div>
 
   
 

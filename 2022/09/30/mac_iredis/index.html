@@ -4,7 +4,7 @@
 <head>
   <meta name="generator" content="Hexo 6.2.0">
   <meta charset="utf-8">
-  <meta name="robots" content="none">
+  
 
   <meta http-equiv='x-dns-prefetch-control' content='on' />
   <link rel='dns-prefetch' href='https://fastly.jsdelivr.net'>
@@ -18,16 +18,22 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="theme-color" content="#f8f8f8">
-  <title>林曦</title>
+  <title>Mac Homebrew修改指定软件的版本 - 林曦</title>
 
   
-    <meta property="og:type" content="website">
-<meta property="og:title" content="林曦">
-<meta property="og:url" content="https://pizsd.github.io/404.html">
+    <meta name="description" content="问题 首先描述下我遇到的问题： 在安装iredis的时候  1brew install iredis  安装的版本总是1.11.0，我不想通过 brew update 更新所有的软件[这个命令会更新好多lib库]，有些版本的软件环境会在brew update后libs找不到，引发很多问题[踩过一次坑，不敢这么搞了] 如果你不是这样的场景，可以直接划走了!!!!! 解决方案 找到iredis.rb的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Mac Homebrew修改指定软件的版本">
+<meta property="og:url" content="https://pizsd.github.io/2022/09/30/mac_iredis/index.html">
 <meta property="og:site_name" content="林曦">
+<meta property="og:description" content="问题 首先描述下我遇到的问题： 在安装iredis的时候  1brew install iredis  安装的版本总是1.11.0，我不想通过 brew update 更新所有的软件[这个命令会更新好多lib库]，有些版本的软件环境会在brew update后libs找不到，引发很多问题[踩过一次坑，不敢这么搞了] 如果你不是这样的场景，可以直接划走了!!!!! 解决方案 找到iredis.rb的">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/ed1d40ed17bb42b09178cd548a7a49d8.png">
+<meta property="article:published_time" content="2022-09-30T01:35:34.972Z">
+<meta property="article:modified_time" content="2022-09-30T01:49:30.336Z">
 <meta property="article:author" content="pizsd">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/ed1d40ed17bb42b09178cd548a7a49d8.png">
   
   
 
@@ -49,42 +55,66 @@
   
 
 
+
+
   <div class='l_body' id='start'>
-    <aside class='l_left' layout='404'>
+    <aside class='l_left' layout='post'>
     
 
 
 <header class="header">
 
 <div class="logo-wrap"><a class="avatar" href="/about/"><div class="bg" style="opacity:0;background-image:url(https://fastly.jsdelivr.net/gh/cdn-x/placeholder@1.0.2/avatar/round/rainbow64@3x.webp);"></div><img no-lazy class="avatar" src="https://fastly.jsdelivr.net/gh/pizsd/blogimgs@latest/avatar.jpg" onerror="javascript:this.classList.add('error');this.src='https://fastly.jsdelivr.net/gh/cdn-x/placeholder@1.0.1/image/2659360.svg';"></a><a class="title" href="/"><div class="main">林曦</div><div class="sub cap">长年积累，偶然得之。</div></a></div>
-<nav class="menu dis-select"><a class="nav-item" href="/">博客</a><a class="nav-item" href="/wiki/">WIKI</a><a class="nav-item" href="/about/">关于</a></nav></header>
+<nav class="menu dis-select"><a class="nav-item active" href="/">博客</a><a class="nav-item" href="/wiki/">WIKI</a><a class="nav-item" href="/about/">关于</a></nav></header>
 
 <div class="widgets">
-<div class="widget-wrap" id="markdown"><div class="widget-header cap dis-select"><span class="name">有朋自远方来，不亦乐乎👏🏻</span></div><div class="widget-body fs14"><p>这里是<code>PIZSD</code>的个人博客<br><strong>📖        内容</strong><br>记录工作，学习中遇到问题<br>希望对你有帮助。<br><strong>💡思考</strong><br>宇宙中所有星球都“悬浮”在太空中<br>到底是什么力量在支撑它们？</p>
-</div></div>
 
-<div class="widget-wrap" id="recent"><div class="widget-header cap dis-select"><span class="name">最近更新</span></div><div class="widget-body fs14"><div class="more-item"><a class="title" href="/2022/09/30/mysql_filter_key/">PHP 模拟mysql 执行过程中IndexKey提取过程</a></div><div class="more-item"><a class="title" href="/2022/07/07/hello-world/">Hello World</a></div><div class="more-item"><a class="title" href="/2022/09/30/mac_iredis/">Mac Homebrew修改指定软件的版本</a></div></div></div>
+<div class="widget-wrap single" id="toc"><div class="widget-header cap dis-select"><span class="name">本文目录</span></div><div class="widget-body fs14"><div class="doc-tree active"><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%97%AE%E9%A2%98"><span class="toc-text">问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88"><span class="toc-text">解决方案</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%82%E8%80%83"><span class="toc-text">参考</span></a></li></ol></div></div></div>
+
+
 </div>
 
 
     </aside>
-    <div class='l_main list'>
+    <div class='l_main'>
       
 
       
-<article class='md error-page'>
-  <h1><img id='error' src='https://fastly.jsdelivr.net/gh/cdn-x/placeholder@1.0.1/404/1c830bfcd517d.svg' alt='404'></h1>
-  <p class='what'>
-    <strong>
-      很抱歉，您访问的页面不存在
-    </strong>
-  </p>
-  <p class='why'>
-    可能是输入地址有误或该地址已被删除
-  </p>
-  <br><br>
-  <a class='button theme' id='back' href="/">返回主页</a>
+
+<div class="bread-nav fs12"><div id="breadcrumb"><a class="cap breadcrumb" href="/">主页</a><span class="sep"></span><a class="cap breadcrumb" href="/">文章</a></div><div id="post-meta">发布于&nbsp;<time datetime="2022-09-30T01:35:34.972Z">2022-09-30</time></div></div>
+
+<article class='content md post'>
+<h1 class="article-title"><span>Mac Homebrew修改指定软件的版本</span></h1>
+<h3 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h3><ul>
+<li>首先描述下我遇到的问题： 在安装<code>iredis</code>的时候</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">brew install iredis</span><br></pre></td></tr></table></figure>
+
+<p>安装的版本总是1.11.0，我不想通过 <code>brew update</code> 更新所有的软件[这个命令会更新好多lib库]，有些版本的软件环境会在<code>brew update</code>后libs找不到，引发很多问题[踩过一次坑，不敢这么搞了]</p>
+<p>如果你不是这样的场景，可以直接划走了!!!!!</p>
+<h3 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h3><ol>
+<li>找到<code>iredis.rb</code>的文件，brew 主要依靠这个去安装包</li>
+<li>去<a target="_blank" rel="noopener" href="https://formulae.brew.sh/">brew.sh</a> 去搜索你需要的包。比如我需要<code>iredis</code>，可以发现包管理中的最新版本是1.12.0，我本地没有更新导致的<br><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://img-blog.csdnimg.cn/ed1d40ed17bb42b09178cd548a7a49d8.png" alt="在这里插入图片描述"></li>
+<li>直接打开<code>iredis.rb</code>,复制里面的代码（也可以在github去搜索指定包的.rb文件），替换到你本地的<code>iredis.rb</code>,PS:也可以直接新建个<code>iredis.rb</code>，随便放哪个目录下都行，然后</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">brew install localdir/iredis.rb</span><br><span class="line"><span class="comment"># 或者</span></span><br><span class="line">brew install https://github.com/Homebrew/homebrew-core/blob/HEAD/Formula/iredis.rb</span><br></pre></td></tr></table></figure>
+
+<p>至此完成更新!!!</p>
+<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><ul>
+<li><a target="_blank" rel="noopener" href="https://segmentfault.com/a/1190000015346120">https://segmentfault.com/a/1190000015346120</a></li>
+</ul>
+
+
+<div class="article-footer reveal fs14"><section id="license"><div class="header"><span>许可协议</span></div><div class="body"><p>本文采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">署名-非商业性使用-相同方式共享 4.0 国际</a> 许可协议，转载请注明出处。</p>
+</div></section></div>
+
 </article>
+
+<div class="related-wrap reveal" id="read-next"><section class="header cap theme"><span>接下来阅读</span></section><section class="body fs14"><a id="next" href="/2022/07/07/hello-world/">Hello World<span class="note">较早</span></a><div class="line"></div><a id="prev" href="/2022/09/30/mysql_filter_key/">PHP 模拟mysql 执行过程中IndexKey提取过程<span class="note">较新</span></a></section></div>
+
+
+
+
 
 
 
