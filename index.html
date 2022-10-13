@@ -63,7 +63,7 @@
 <div class="widget-wrap" id="markdown"><div class="widget-header cap dis-select"><span class="name">有朋自远方来，不亦乐乎👏🏻</span></div><div class="widget-body fs14"><p>这里是<code>PIZSD</code>的个人博客<br><strong>📖        内容</strong><br>记录工作，学习中遇到问题<br>希望对你有帮助。<br><strong>💡思考</strong><br>宇宙中所有星球都“悬浮”在太空中<br>到底是什么力量在支撑它们？</p>
 </div></div>
 
-<div class="widget-wrap" id="recent"><div class="widget-header cap dis-select"><span class="name">最近更新</span></div><div class="widget-body fs14"><div class="more-item"><a class="title" href="/2022/10/12/rime_add_options/">Rime小狼毫输入法切换环境自动切换输入法</a></div><div class="more-item"><a class="title" href="/2022/09/30/mac_iredis/">Mac Homebrew修改指定软件的版本</a></div><div class="more-item"><a class="title" href="/2022/10/10/mobile_photography/">学习手机摄影笔记(iPhone)</a></div><div class="more-item"><a class="title" href="/2022/07/07/hello-world/">Hello World</a></div><div class="more-item"><a class="title" href="/2022/09/30/mysql_filter_key/">PHP 模拟mysql 执行过程中IndexKey提取过程</a></div></div></div>
+<div class="widget-wrap" id="recent"><div class="widget-header cap dis-select"><span class="name">最近更新</span></div><div class="widget-body fs14"><div class="more-item"><a class="title" href="/2022/10/10/mobile_photography/">学习手机摄影笔记(iPhone)</a></div><div class="more-item"><a class="title" href="/2022/09/30/mac_iredis/">Mac Homebrew修改指定软件的版本</a></div><div class="more-item"><a class="title" href="/2022/09/30/linux_ntp/">NTP同步服务使用</a></div><div class="more-item"><a class="title" href="/2022/07/07/hello-world/">Hello World</a></div><div class="more-item"><a class="title" href="/2022/10/12/rime_add_options/">Rime小狼毫输入法切换环境自动切换输入法</a></div></div></div>
 </div>
 
 
@@ -98,12 +98,8 @@
 </div>
 
   <div class="post-list post"><a class="post-card post " href="/2022/10/12/rime_add_options/">
-<article class="md"><h2 class="post-title">Rime小狼毫输入法切换环境自动切换输入法</h2><div class="excerpt"><p>问题
-以前在安装Rime-小狼毫输入法时，没太注意，输入法可以按照环境切换输入模式，导致后续遇到在 iTerm2 中无法输入中文，自带的命令行系统也无法输入
-
-解决
-在试了其他命令工具发现可以输入，很奇怪，经过一番折腾，最终确认是输入法配置的问题
-squirrel.custom.yaml 通过配置文件可以发现，当软件是iTerm2，系统自带命令 ascii_mode = true 也就是说在...</p></div><div class="meta cap"><span class="cap" id="post-meta">发布于&nbsp;<time datetime="2022-10-12T06:14:11.092Z">2022-10-12</time></span></div></article>
+<article class="md"><h2 class="post-title">Rime小狼毫输入法切换环境自动切换输入法</h2><div class="excerpt"><p>问题以前在安装Rime-小狼毫输入法时，没太注意，输入法可以按照环境切换输入模式，导致后续遇到在 iTerm2 中无法输入中文，自带的命令行系统也无法输入
+解决在试了其他命令工具发现可以输入，很奇怪，经过一番折腾，最终确认是输入法配置的问题squirrel.custom.yaml 通过配置文件可以发现，当软件是iTerm2，系统自带命令 ascii_mode = true 也就是说在这些软件...</p></div><div class="meta cap"><span class="cap" id="post-meta">发布于&nbsp;<time datetime="2022-10-12T06:14:11.092Z">2022-10-12</time></span></div></article>
 </a><a class="post-card post " href="/2022/10/10/mobile_photography/">
 <article class="md"><h2 class="post-title">学习手机摄影笔记(iPhone)</h2><div class="excerpt"><p>学习手机摄影中一些需要记住的要点和一些隐藏的小技巧。</p></div><div class="meta cap"><span class="cap" id="post-meta">发布于&nbsp;<time datetime="2022-10-10T01:32:30.337Z">2022-10-10</time></span></div></article>
 </a><a class="post-card post " href="/2022/09/30/phpstrorm_hotkey/">
@@ -115,15 +111,13 @@ squirrel.custom.yaml 通过配置文件可以发现，当软件是iTerm2，系�
 </a><a class="post-card post " href="/2022/09/30/mysql_filter_key/">
 <article class="md"><h2 class="post-title">PHP 模拟mysql 执行过程中IndexKey提取过程</h2><div class="excerpt"><p>在学习Mysql索引相关问题，为了加深记忆，用PHP模拟实现了Mysql在存储引擎执行sql之前，模拟Where条件的提取过程。</p></div><div class="meta cap"><span class="cap" id="post-meta">发布于&nbsp;<time datetime="2022-09-30T02:20:34.015Z">2022-09-30</time></span></div></article>
 </a><a class="post-card post " href="/2022/09/30/mac_iredis/">
-<article class="md"><h2 class="post-title">Mac Homebrew修改指定软件的版本</h2><div class="excerpt"><p>问题
-首先描述下我遇到的问题： 在安装iredis的时候
-
+<article class="md"><h2 class="post-title">Mac Homebrew修改指定软件的版本</h2><div class="excerpt"><p>问题首先描述下我遇到的问题： 在安装iredis的时候
 1brew install iredis
 
 安装的版本总是1.11.0，我不想通过 brew update 更新所有的软件[这个命令会更新好多lib库]，有些版本的软件环境会在brew update后libs找不到，引发很多问题[踩过一次坑，不敢这么搞了]
 如果你不是这样的场景，可以直接划走了!!!!!
 解决方案
-找到iredis....</p></div><div class="meta cap"><span class="cap" id="post-meta">发布于&nbsp;<time datetime="2022-09-30T01:35:34.972Z">2022-09-30</time></span></div></article>
+找到iredis.rb...</p></div><div class="meta cap"><span class="cap" id="post-meta">发布于&nbsp;<time datetime="2022-09-30T01:35:34.972Z">2022-09-30</time></span></div></article>
 </a><a class="post-card post " href="/2022/07/07/hello-world/">
 <article class="md"><div class="post-cover"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://source.unsplash.com/1280x640/?PHP"/></div><h2 class="post-title">Hello World</h2><div class="excerpt"><p>你好,PHP!</p></div><div class="meta cap"><span class="cap" id="post-meta">发布于&nbsp;<time datetime="2022-07-07T08:33:38.841Z">2022-07-07</time></span></div></article>
 </a></div>
