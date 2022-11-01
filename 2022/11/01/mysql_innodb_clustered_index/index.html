@@ -4,7 +4,7 @@
 <head>
   <meta name="generator" content="Hexo 6.2.0">
   <meta charset="utf-8">
-  <meta name="robots" content="noindex,follow">
+  
 
   <meta http-equiv='x-dns-prefetch-control' content='on' />
   <link rel='dns-prefetch' href='https://fastly.jsdelivr.net'>
@@ -18,16 +18,22 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="theme-color" content="#f8f8f8">
-  <title>归档 - 林曦</title>
+  <title>Mysql InnoDB中的聚簇索引 - 林曦</title>
 
   
-    <meta property="og:type" content="website">
-<meta property="og:title" content="归档">
-<meta property="og:url" content="https://pizsd.github.io/archives/2022/index.html">
+    <meta name="description" content="Mysql 中InnoDB存储引擎的聚簇索引结构和优化">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Mysql InnoDB中的聚簇索引">
+<meta property="og:url" content="https://pizsd.github.io/2022/11/01/mysql_innodb_clustered_index/index.html">
 <meta property="og:site_name" content="林曦">
+<meta property="og:description" content="Mysql 中InnoDB存储引擎的聚簇索引结构和优化">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/c0fe7c4e90cd4b8294f1543acba351b1~tplv-k3u1fbpfcp-zoom-in-crop-mark:4536:0:0:0.image">
+<meta property="article:published_time" content="2022-11-01T10:39:20.783Z">
+<meta property="article:modified_time" content="2022-11-01T11:23:49.603Z">
 <meta property="article:author" content="pizsd">
-<meta name="twitter:card" content="summary">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/c0fe7c4e90cd4b8294f1543acba351b1~tplv-k3u1fbpfcp-zoom-in-crop-mark:4536:0:0:0.image">
   
   
 
@@ -49,8 +55,10 @@
   
 
 
+
+
   <div class='l_body' id='start'>
-    <aside class='l_left' layout=''>
+    <aside class='l_left' layout='post'>
     
 
 
@@ -60,215 +68,50 @@
 <nav class="menu dis-select"><a class="nav-item active" href="/">博客</a><a class="nav-item" href="/wiki/">WIKI</a><a class="nav-item" href="/about/">关于</a></nav></header>
 
 <div class="widgets">
-<div class="widget-wrap" id="markdown"><div class="widget-header cap dis-select"><span class="name">有朋自远方来，不亦乐乎👏🏻</span></div><div class="widget-body fs14"><p>这里是<code>PIZSD</code>的个人博客<br><strong>📖        内容</strong><br>记录工作，学习中遇到问题<br>希望对你有帮助。<br><strong>💡思考</strong><br>宇宙中所有星球都“悬浮”在太空中<br>到底是什么力量在支撑它们？</p>
-</div></div>
 
-<div class="widget-wrap" id="recent"><div class="widget-header cap dis-select"><span class="name">最近更新</span></div><div class="widget-body fs14"><div class="more-item"><a class="title" href="/2022/11/01/mysql_innodb_clustered_index/">Mysql InnoDB中的聚簇索引</a></div><div class="more-item"><a class="title" href="/2022/09/30/mac_iredis/">Mac Homebrew修改指定软件的版本</a></div><div class="more-item"><a class="title" href="/2022/10/10/mobile_photography/">学习手机摄影笔记(iPhone)</a></div><div class="more-item"><a class="title" href="/2022/09/30/mysql_filter_key/">PHP 模拟mysql 执行过程中IndexKey提取过程</a></div><div class="more-item"><a class="title" href="/2022/10/14/php_language1/">关于PHP隐式类型转换的一些坑，还挺有意思</a></div></div></div>
+<div class="widget-wrap single" id="toc"><div class="widget-header cap dis-select"><span class="name">本文目录</span></div><div class="widget-body fs14"><div class="doc-tree active"><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%89%A9%E7%90%86%E7%BB%93%E6%9E%84"><span class="toc-text">物理结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A7%A3%E8%AF%BB"><span class="toc-text">解读</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9B%9E%E8%A1%A8"><span class="toc-text">回表</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%B4%A2%E5%BC%95%E8%A6%86%E7%9B%96"><span class="toc-text">索引覆盖</span></a></li></ol></div></div></div>
+
+
 </div>
 
 
     </aside>
-    <div class='l_main list'>
+    <div class='l_main'>
       
-  
-
-<header class="header mobile-only">
-
-<div class="logo-wrap"><a class="avatar" href="/about/"><div class="bg" style="opacity:0;background-image:url(https://fastly.jsdelivr.net/gh/cdn-x/placeholder@1.0.2/avatar/round/rainbow64@3x.webp);"></div><img no-lazy class="avatar" src="https://fastly.jsdelivr.net/gh/pizsd/blogimgs@latest/avatar.jpg" onerror="javascript:this.classList.add('error');this.src='https://fastly.jsdelivr.net/gh/cdn-x/placeholder@1.0.1/image/2659360.svg';"></a><a class="title" href="/"><div class="main">林曦</div><div class="sub cap">长年积累，偶然得之。</div></a></div>
-</header>
-
-
 
       
 
-  
-  <div class='nav-wrap'>
-  <nav class='sub post cap'>
-    
-      <a href='/'>近期发布</a>
-    
-    
-    
-    
-      
-        <a class='active' href='/archives'>归档</a>
-      
-    
-  </nav>
-</div>
+<div class="bread-nav fs12"><div id="breadcrumb"><a class="cap breadcrumb" href="/">主页</a><span class="sep"></span><a class="cap breadcrumb" href="/">文章</a></div><div id="post-meta">发布于&nbsp;<time datetime="2022-11-01T10:39:20.783Z">2022-11-01</time></div></div>
 
-  <div class='post-list'>
-  	
-  	
-  		
-  		
-  			
-  		
-  	
-  		
-  		
-  	
-  		
-  		
-  	
-  		
-  		
-  	
-  		
-  		
-  	
-  		
-  		
-  	
-  		
-  		
-  	
-  		
-  		
-  	
-  		
-  		
-  	
-  		
-  		
-  	
-  	
-  		<article class='' id='archive'>
-  			<div class='archive-header h4'>2022</div>
-  			
-  				
-  		    
-  				
-  		    
-  				
-  		    
-  				
-  		    
-  				
-  		    
-  				
-  		    
-  				
-  		    
-  				
-  		    
-  				
-  		    
-  				
-  		    
-  				<div class='archive-list'>
-            <a class='post fs14' href="/2022/11/01/mysql_innodb_clustered_index/">
-    					<time>11-01</time>
-    					<span>
-                
-      						Mysql InnoDB中的聚簇索引
-      					
-              </span>
-    				</a>
-          </div>
-  			
-  				<div class='archive-list'>
-            <a class='post fs14' href="/2022/10/14/php_language1/">
-    					<time>10-14</time>
-    					<span>
-                
-      						关于PHP隐式类型转换的一些坑，还挺有意思
-      					
-              </span>
-    				</a>
-          </div>
-  			
-  				<div class='archive-list'>
-            <a class='post fs14' href="/2022/10/12/rime_add_options/">
-    					<time>10-12</time>
-    					<span>
-                
-      						Rime小狼毫输入法切换环境自动切换输入法
-      					
-              </span>
-    				</a>
-          </div>
-  			
-  				<div class='archive-list'>
-            <a class='post fs14' href="/2022/10/10/mobile_photography/">
-    					<time>10-10</time>
-    					<span>
-                
-      						学习手机摄影笔记(iPhone)
-      					
-              </span>
-    				</a>
-          </div>
-  			
-  				<div class='archive-list'>
-            <a class='post fs14' href="/2022/09/30/phpstrorm_hotkey/">
-    					<time>09-30</time>
-    					<span>
-                
-      						PhpStorm 插件+快捷键(不定期更新)
-      					
-              </span>
-    				</a>
-          </div>
-  			
-  				<div class='archive-list'>
-            <a class='post fs14' href="/2022/09/30/linux_ntp/">
-    					<time>09-30</time>
-    					<span>
-                
-      						NTP同步服务使用
-      					
-              </span>
-    				</a>
-          </div>
-  			
-  				<div class='archive-list'>
-            <a class='post fs14' href="/2022/09/30/macos_hotkey/">
-    					<time>09-30</time>
-    					<span>
-                
-      						Mac OS 命令行快捷键(比较常用)
-      					
-              </span>
-    				</a>
-          </div>
-  			
-  				<div class='archive-list'>
-            <a class='post fs14' href="/2022/09/30/mysql_filter_key/">
-    					<time>09-30</time>
-    					<span>
-                
-      						PHP 模拟mysql 执行过程中IndexKey提取过程
-      					
-              </span>
-    				</a>
-          </div>
-  			
-  				<div class='archive-list'>
-            <a class='post fs14' href="/2022/09/30/mac_iredis/">
-    					<time>09-30</time>
-    					<span>
-                
-      						Mac Homebrew修改指定软件的版本
-      					
-              </span>
-    				</a>
-          </div>
-  			
-  				<div class='archive-list'>
-            <a class='post fs14' href="/2022/07/07/hello-world/">
-    					<time>07-07</time>
-    					<span>
-                
-      						Hello World
-      					
-              </span>
-    				</a>
-          </div>
-  			
-  		</article>
-  	
-  </div>
+<article class='content md post'>
+<h1 class="article-title"><span>Mysql InnoDB中的聚簇索引</span></h1>
+<p> Mysql 中InnoDB存储引擎的聚簇索引结构和优化</p>
+<span id="more"></span>
+
+<h3 id="物理结构"><a href="#物理结构" class="headerlink" title="物理结构"></a>物理结构</h3><div class="tag-plugin image"><div class="image-bg"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/c0fe7c4e90cd4b8294f1543acba351b1~tplv-k3u1fbpfcp-zoom-in-crop-mark:4536:0:0:0.image"/></div></div>
+
+<h3 id="解读"><a href="#解读" class="headerlink" title="解读"></a>解读</h3><p>首先 <code>聚簇索引</code> 并不是一种单独的索引类型，而是一种数据存储方式。具体细节依赖于其实现方式。</p>
+<p>MySQL数据库中innodb存储引擎，B+树索引可以分为聚簇索引（也称聚集索引，clustered index）和辅助索引（有时也称非聚簇索引或二级索引，secondary index，non-clustered index）。这两种索引内部都是B+树，聚集索引的叶子节点存放着一整行的数据，非聚簇索引存储的索引值，数据行的主键。</p>
+<p>Innobd中的主键索引是一种聚簇索引，非聚簇索引都是辅助索引，像复合索引、前缀索引、唯一索引。</p>
+<p>Innodb使用的是聚簇索引，MyISam使用的是非聚簇索引</p>
+<h3 id="回表"><a href="#回表" class="headerlink" title="回表"></a>回表</h3><p>因为非聚簇索引叶子节点存储的是索引对应的数据值和数据行主键，所以如果在非聚簇索引上查找索引之外的字段，需要去通过非聚簇索引的主键值，再到 聚簇索引树搜索一次，这个过程就称之为 <code>回表</code>，也就是说基于非主键索引的查询需要多扫描一棵索引树。避免 <code>回表</code> 可以有效的提高查询性能。</p>
+<h3 id="索引覆盖"><a href="#索引覆盖" class="headerlink" title="索引覆盖"></a>索引覆盖</h3><p>所谓覆盖索引就是指索引中包含了查询中的所有字段，也就是只需要在一棵索引树上就能获取SQL所需的所有列数据，无需回表，速度更快。</p>
+<p>explain的输出结果Extra字段为Using index时，能够触发索引覆盖。</p>
+<p>实现索引覆盖方式：将被查询的字段，建立到联合索引里去。(视情况而定，有些字段不适合加索引，尽量不加)</p>
+
+
+<div class="article-footer reveal fs14"><section id="license"><div class="header"><span>许可协议</span></div><div class="body"><p>本文采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">署名-非商业性使用-相同方式共享 4.0 国际</a> 许可协议，转载请注明出处。</p>
+</div></section></div>
+
+</article>
+
+<div class="related-wrap reveal" id="read-next"><section class="header cap theme"><span>接下来阅读</span></section><section class="body fs14"><a id="next" href="/2022/10/14/php_language1/">关于PHP隐式类型转换的一些坑，还挺有意思<span class="note">较早</span></a><div class="line"></div></section></div>
+
+
+
+
+
+
 
 
       
