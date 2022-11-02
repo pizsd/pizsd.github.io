@@ -30,7 +30,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/c0fe7c4e90cd4b8294f1543acba351b1~tplv-k3u1fbpfcp-zoom-in-crop-mark:4536:0:0:0.image">
 <meta property="article:published_time" content="2022-11-01T10:39:20.783Z">
-<meta property="article:modified_time" content="2022-11-01T11:23:49.603Z">
+<meta property="article:modified_time" content="2022-11-02T01:27:42.482Z">
 <meta property="article:author" content="pizsd">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/c0fe7c4e90cd4b8294f1543acba351b1~tplv-k3u1fbpfcp-zoom-in-crop-mark:4536:0:0:0.image">
@@ -94,7 +94,7 @@
 <p>MySQL数据库中innodb存储引擎，B+树索引可以分为聚簇索引（也称聚集索引，clustered index）和辅助索引（有时也称非聚簇索引或二级索引，secondary index，non-clustered index）。这两种索引内部都是B+树，聚集索引的叶子节点存放着一整行的数据，非聚簇索引存储的索引值，数据行的主键。</p>
 <p>Innobd中的主键索引是一种聚簇索引，非聚簇索引都是辅助索引，像复合索引、前缀索引、唯一索引。</p>
 <p>Innodb使用的是聚簇索引，MyISam使用的是非聚簇索引</p>
-<h3 id="回表"><a href="#回表" class="headerlink" title="回表"></a>回表</h3><p>因为非聚簇索引叶子节点存储的是索引对应的数据值和数据行主键，所以如果在非聚簇索引上查找索引之外的字段，需要去通过非聚簇索引的主键值，再到 聚簇索引树搜索一次，这个过程就称之为 <code>回表</code>，也就是说基于非主键索引的查询需要多扫描一棵索引树。避免 <code>回表</code> 可以有效的提高查询性能。</p>
+<h3 id="回表"><a href="#回表" class="headerlink" title="回表"></a>回表</h3><p>因为非聚簇索引叶子节点存储的是索引对应的数据值和数据行主键，所以如果在非聚簇索引上查找索引之外的字段，需要去通过非聚簇索引的主键值，再到 <code>聚簇索引</code> 树搜索一次，这个过程就称之为 <code>回表</code>，也就是说基于非主键索引的查询需要多扫描一棵索引树。避免 <code>回表</code> 可以有效的提高查询性能。</p>
 <h3 id="索引覆盖"><a href="#索引覆盖" class="headerlink" title="索引覆盖"></a>索引覆盖</h3><p>所谓覆盖索引就是指索引中包含了查询中的所有字段，也就是只需要在一棵索引树上就能获取SQL所需的所有列数据，无需回表，速度更快。</p>
 <p>explain的输出结果Extra字段为Using index时，能够触发索引覆盖。</p>
 <p>实现索引覆盖方式：将被查询的字段，建立到联合索引里去。(视情况而定，有些字段不适合加索引，尽量不加)</p>
