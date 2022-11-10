@@ -28,8 +28,8 @@
 <meta property="og:site_name" content="林曦">
 <meta property="og:description" content="声明 Map 声明使用 var 关键字  1var m map[string]string  使用 这里先提前说明一点，Map 在声明以后的初始值是空map ，是无法进行赋值操作的，否则编译报错 panic: assignment to entry in nil map，这里意思就是：给空 Map 赋值   需要先进行 make 进行内存分配才能进行赋值操作，Golang还有chan、map 以及">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2022-09-29T10:24:50.078Z">
-<meta property="article:modified_time" content="2022-09-29T10:24:50.078Z">
+<meta property="article:published_time" content="2022-11-10T01:42:07.990Z">
+<meta property="article:modified_time" content="2022-11-10T01:42:07.990Z">
 <meta property="article:author" content="pizsd">
 <meta property="article:tag" content="Go">
 <meta name="twitter:card" content="summary">
@@ -68,7 +68,7 @@
 
 <div class="widgets">
 
-<div class="widget-wrap multi" id="toc"><div class="widget-header cap dis-select"><span class="name">基础知识踩坑</span></div><div class="widget-body fs14"><div class="doc-tree"><a class="doc-tree-link" href="/wiki/go/index.html"><span class="toc-text">Golang中的断言</span></a></div><div class="doc-tree"><a class="doc-tree-link" href="/wiki/go/go_tag.html"><span class="toc-text">Golang中那些“奇怪”的注释</span></a></div><div class="doc-tree active"><a class="doc-tree-link active" href="/wiki/go/go_map.html"><span class="toc-text">Golang中Map的声明与使用</span></a><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A3%B0%E6%98%8E"><span class="toc-text">声明</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8"><span class="toc-text">使用</span></a></li></ol></div><div class="doc-tree"><a class="doc-tree-link" href="/wiki/go/go_func_return.html"><span class="toc-text">Golang中func定义返回参数名称</span></a></div></div></div>
+<div class="widget-wrap multi" id="toc"><div class="widget-header cap dis-select"><span class="name">基础知识踩坑</span></div><div class="widget-body fs14"><div class="doc-tree"><a class="doc-tree-link" href="/wiki/go/index.html"><span class="toc-text">Golang中的断言</span></a></div><div class="doc-tree"><a class="doc-tree-link" href="/wiki/go/go_tag.html"><span class="toc-text">Golang中那些“奇怪”的注释</span></a></div><div class="doc-tree active"><a class="doc-tree-link active" href="/wiki/go/go_map.html"><span class="toc-text">Golang中Map的声明与使用</span></a><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A3%B0%E6%98%8E"><span class="toc-text">声明</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8"><span class="toc-text">使用</span></a></li></ol></div><div class="doc-tree"><a class="doc-tree-link" href="/wiki/go/go_func_return.html"><span class="toc-text">Golang中func定义返回参数名称</span></a></div><div class="doc-tree"><a class="doc-tree-link" href="/wiki/go/go_array.html"><span class="toc-text">Golang数组中的一些细节</span></a></div></div></div>
 
 
 
@@ -84,7 +84,7 @@
 
   
   
-<div class="bread-nav fs12"><div id="breadcrumb"><a class="cap breadcrumb" id="home" href="/">主页</a><span class="sep"></span><a class="cap breadcrumb" id="menu" href="/wiki/">WIKI</a><span class="sep"></span><a class="cap breadcrumb" id="proj" href="/wiki/go/index.html">Golang</a></div><div id="post-meta">更新于&nbsp;<time datetime="2022-09-29T10:24:50.078Z">2022-09-29</time></div></div>
+<div class="bread-nav fs12"><div id="breadcrumb"><a class="cap breadcrumb" id="home" href="/">主页</a><span class="sep"></span><a class="cap breadcrumb" id="menu" href="/wiki/">WIKI</a><span class="sep"></span><a class="cap breadcrumb" id="proj" href="/wiki/go/index.html">Golang</a></div><div id="post-meta">更新于&nbsp;<time datetime="2022-11-10T01:42:07.990Z">2022-11-10</time></div></div>
 
   <article class='content md wiki'>
   <h1 class="article-title"><span>Golang中Map的声明与使用</span></h1>
