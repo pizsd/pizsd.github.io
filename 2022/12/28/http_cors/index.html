@@ -18,14 +18,18 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="theme-color" content="#f8f8f8">
-  <title>林曦</title>
+  <title>http中的跨域资源共享（Cors）详解 - 林曦</title>
 
   
-    <meta property="og:type" content="website">
-<meta property="og:title" content="林曦">
-<meta property="og:url" content="https://pizsd.github.io/page/2/index.html">
+    <meta name="description" content="跨域资源共享 CORS 详解">
+<meta property="og:type" content="article">
+<meta property="og:title" content="http中的跨域资源共享（Cors）详解">
+<meta property="og:url" content="https://pizsd.github.io/2022/12/28/http_cors/index.html">
 <meta property="og:site_name" content="林曦">
+<meta property="og:description" content="跨域资源共享 CORS 详解">
 <meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-12-28T03:53:06.265Z">
+<meta property="article:modified_time" content="2022-12-28T03:55:47.349Z">
 <meta property="article:author" content="pizsd">
 <meta name="twitter:card" content="summary">
   
@@ -49,8 +53,10 @@
   
 
 
+
+
   <div class='l_body' id='start'>
-    <aside class='l_left' layout=''>
+    <aside class='l_left' layout='post'>
     
 
 
@@ -60,70 +66,40 @@
 <nav class="menu dis-select"><a class="nav-item active" href="/">博客</a><a class="nav-item" href="/wiki/">WIKI</a><a class="nav-item" href="/about/">关于</a></nav></header>
 
 <div class="widgets">
-<div class="widget-wrap" id="markdown"><div class="widget-header cap dis-select"><span class="name">有朋自远方来，不亦乐乎👏🏻</span></div><div class="widget-body fs14"><p>这里是<code>PIZSD</code>的个人博客<br><strong>📖        内容</strong><br>记录工作，学习中遇到问题<br>希望对你有帮助。<br><strong>💡思考</strong><br>宇宙中所有星球都“悬浮”在太空中<br>到底是什么力量在支撑它们？</p>
-</div></div>
 
-<div class="widget-wrap" id="recent"><div class="widget-header cap dis-select"><span class="name">最近更新</span></div><div class="widget-body fs14"><div class="more-item"><a class="title" href="/2022/12/28/http_cors/">http中的跨域资源共享（Cors）详解</a></div><div class="more-item"><a class="title" href="/2022/12/28/charles_mac/">MacOS下的抓包工具Charles</a></div><div class="more-item"><a class="title" href="/2022/11/13/js_vue_print-nb/">Vue中使用vue-print-nb插件</a></div><div class="more-item"><a class="title" href="/2022/11/04/php_ioc/">终于看到一句话把控制反转(IoC)说的这么明白了</a></div><div class="more-item"><a class="title" href="/2022/11/01/mysql_innodb_clustered_index/">Mysql InnoDB中的聚簇索引</a></div></div></div>
+<div class="widget-wrap single" id="toc"><div class="widget-header cap dis-select"><span class="name">本文目录</span></div><div class="widget-body fs14"><div class="doc-tree active"><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BD%AC%E8%BD%BD%E6%96%87%E7%AB%A0"><span class="toc-text">转载文章</span></a></li></ol></div></div></div>
+
+
 </div>
 
 
     </aside>
-    <div class='l_main list'>
+    <div class='l_main'>
       
-  
-
-<header class="header mobile-only">
-
-<div class="logo-wrap"><a class="avatar" href="/about/"><div class="bg" style="opacity:0;background-image:url(https://fastly.jsdelivr.net/gh/cdn-x/placeholder@1.0.2/avatar/round/rainbow64@3x.webp);"></div><img no-lazy class="avatar" src="https://fastly.jsdelivr.net/gh/pizsd/blogimgs@latest/avatar.jpg" onerror="javascript:this.classList.add('error');this.src='https://fastly.jsdelivr.net/gh/cdn-x/placeholder@1.0.1/image/2659360.svg';"></a><a class="title" href="/"><div class="main">林曦</div><div class="sub cap">长年积累，偶然得之。</div></a></div>
-</header>
-
-
 
       
 
+<div class="bread-nav fs12"><div id="breadcrumb"><a class="cap breadcrumb" href="/">主页</a><span class="sep"></span><a class="cap breadcrumb" href="/">文章</a></div><div id="post-meta">发布于&nbsp;<time datetime="2022-12-28T03:53:06.265Z">2022-12-28</time></div></div>
 
-  <div class='nav-wrap'>
-  <nav class='sub post cap'>
-    
-      <a class='active' href='/'>近期发布</a>
-    
-    
-    
-    
-      
-        <a href='/archives'>归档</a>
-      
-    
-  </nav>
-</div>
+<article class='content md post'>
+<h1 class="article-title"><span>http中的跨域资源共享（Cors）详解</span></h1>
+<p>跨域资源共享 CORS 详解</p>
+<span id="more"></span>
 
-  <div class="post-list post"><a class="post-card post " href="/2022/09/30/macos_hotkey/">
-<article class="md"><h2 class="post-title">Mac OS 命令行快捷键(比较常用)</h2><div class="excerpt"><p>Mac OS 命令行快捷键,持续更新</p></div><div class="meta cap"><span class="cap" id="post-meta">发布于&nbsp;<time datetime="2022-09-30T02:34:30.906Z">2022-09-30</time></span></div></article>
-</a><a class="post-card post " href="/2022/09/30/mysql_filter_key/">
-<article class="md"><h2 class="post-title">PHP 模拟mysql 执行过程中IndexKey提取过程</h2><div class="excerpt"><p>在学习Mysql索引相关问题，为了加深记忆，用PHP模拟实现了Mysql在存储引擎执行sql之前，模拟Where条件的提取过程。</p></div><div class="meta cap"><span class="cap" id="post-meta">发布于&nbsp;<time datetime="2022-09-30T02:20:34.015Z">2022-09-30</time></span></div></article>
-</a><a class="post-card post " href="/2022/09/30/mac_iredis/">
-<article class="md"><h2 class="post-title">Mac Homebrew修改指定软件的版本</h2><div class="excerpt"><p>问题首先描述下我遇到的问题： 在安装iredis的时候
-1brew install iredis
 
-安装的版本总是1.11.0，我不想通过 brew update 更新所有的软件[这个命令会更新好多lib库]，有些版本的软件环境会在brew update后libs找不到，引发很多问题[踩过一次坑，不敢这么搞了]
-如果你不是这样的场景，可以直接划走了!!!!!
-解决方案
-找到iredis.rb...</p></div><div class="meta cap"><span class="cap" id="post-meta">发布于&nbsp;<time datetime="2022-09-30T01:35:34.972Z">2022-09-30</time></span></div></article>
-</a><a class="post-card post " href="/2022/07/07/hello-world/">
-<article class="md"><div class="post-cover"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://source.unsplash.com/1280x640/?PHP"/></div><h2 class="post-title">Hello World</h2><div class="excerpt"><p>你好,PHP!</p></div><div class="meta cap"><span class="cap" id="post-meta">发布于&nbsp;<time datetime="2022-07-07T08:33:38.841Z">2022-07-07</time></span></div></article>
-</a></div>
-  
-  <div class='paginator-wrap dis-select'>
-    <a class='paginator prev' href='/'>
-      <img src='https://fastly.jsdelivr.net/gh/cdn-x/placeholder@1.0.1/arrow/f049bbd4e88ec.svg'/>
-    </a>
-    <div class='paginator current'>
-      2<span class='sep'></span>2
-    </div>
-    <a class='paginator next disable' href='/'>
-      <img src='https://fastly.jsdelivr.net/gh/cdn-x/placeholder@1.0.1/arrow/064b95430caf4.svg'/>
-    </a>
-  </div>
+<h3 id="转载文章"><a href="#转载文章" class="headerlink" title="转载文章"></a>转载文章</h3><p>文章地址：<a target="_blank" rel="noopener" href="https://www.ruanyifeng.com/blog/2016/04/cors.html">跨域资源共享 CORS 详解</a></p>
+
+
+<div class="article-footer reveal fs14"><section id="license"><div class="header"><span>许可协议</span></div><div class="body"><p>本文采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">署名-非商业性使用-相同方式共享 4.0 国际</a> 许可协议，转载请注明出处。</p>
+</div></section></div>
+
+</article>
+
+<div class="related-wrap reveal" id="read-next"><section class="header cap theme"><span>接下来阅读</span></section><section class="body fs14"><a id="next" href="/2022/12/28/charles_mac/">MacOS下的抓包工具Charles<span class="note">较早</span></a><div class="line"></div></section></div>
+
+
+
+
 
 
 
