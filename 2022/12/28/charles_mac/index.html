@@ -18,15 +18,15 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="theme-color" content="#f8f8f8">
-  <title>MacOS下的抓包工具Charles - 林曦</title>
+  <title>macOS下的抓包工具Charles - 林曦</title>
 
   
-    <meta name="description" content="Mac下配置Charles抓包工具，以及无法抓包的原因">
+    <meta name="description" content="mac下配置Charles抓包工具，以及无法抓包的原因">
 <meta property="og:type" content="article">
-<meta property="og:title" content="MacOS下的抓包工具Charles">
+<meta property="og:title" content="macOS下的抓包工具Charles">
 <meta property="og:url" content="https://pizsd.github.io/2022/12/28/charles_mac/index.html">
 <meta property="og:site_name" content="林曦">
-<meta property="og:description" content="Mac下配置Charles抓包工具，以及无法抓包的原因">
+<meta property="og:description" content="mac下配置Charles抓包工具，以及无法抓包的原因">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/2a9e05b7678e4cf9828a6a549f526a52~tplv-k3u1fbpfcp-zoom-in-crop-mark:4536:0:0:0.image">
 <meta property="og:image" content="https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/8a77d48a5a3a4846bf37c4ec6d0660eb~tplv-k3u1fbpfcp-zoom-in-crop-mark:4536:0:0:0.image">
@@ -38,7 +38,7 @@
 <meta property="og:image" content="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/b083b15f334b4b619ca11f3c52b15ddf~tplv-k3u1fbpfcp-zoom-in-crop-mark:4536:0:0:0.image">
 <meta property="og:image" content="https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/133897388055486e95e6cc3c94e30063~tplv-k3u1fbpfcp-zoom-in-crop-mark:4536:0:0:0.image">
 <meta property="article:published_time" content="2022-12-28T03:14:07.508Z">
-<meta property="article:modified_time" content="2023-05-16T10:36:52.225Z">
+<meta property="article:modified_time" content="2023-05-16T10:45:38.349Z">
 <meta property="article:author" content="pizsd">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/2a9e05b7678e4cf9828a6a549f526a52~tplv-k3u1fbpfcp-zoom-in-crop-mark:4536:0:0:0.image">
@@ -92,8 +92,8 @@
 <div class="bread-nav fs12"><div id="breadcrumb"><a class="cap breadcrumb" href="/">主页</a><span class="sep"></span><a class="cap breadcrumb" href="/">文章</a></div><div id="post-meta">发布于&nbsp;<time datetime="2022-12-28T03:14:07.508Z">2022-12-28</time></div></div>
 
 <article class='content md post'>
-<h1 class="article-title"><span>MacOS下的抓包工具Charles</span></h1>
-<p>Mac下配置Charles抓包工具，以及无法抓包的原因</p>
+<h1 class="article-title"><span>macOS下的抓包工具Charles</span></h1>
+<p>mac下配置Charles抓包工具，以及无法抓包的原因</p>
 <span id="more"></span>
 
 <h3 id="关闭代理"><a href="#关闭代理" class="headerlink" title="关闭代理"></a>关闭代理</h3><ul>
@@ -102,7 +102,7 @@
 </ul>
 <h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><p>Charles官网下载安装包：<a target="_blank" rel="noopener" href="https://www.charlesproxy.com/download/">https://www.charlesproxy.com/download/</a></p>
 <h3 id="配置Charles抓取web请求"><a href="#配置Charles抓取web请求" class="headerlink" title="配置Charles抓取web请求"></a>配置Charles抓取web请求</h3><ol>
-<li>安装 <code>Charles</code> 证书到MAC</li>
+<li>安装 <code>Charles</code> 证书到mac</li>
 </ol>
 <ul>
 <li>启动Charles，选择Help–&gt;SSL Proxying→Install Charles Root Certificate</li>
@@ -150,7 +150,7 @@
 <li>确认 <code>Charles</code> 是否开启抓取，Proxy -&gt; start recording</li>
 <li>抓取设置，是否添加了相应抓取域名，或者通配域名，请查看 <code>Charles</code> 配置教程</li>
 <li>如果是https请求，证书问题，查看证书是否信任</li>
-<li>确认本地网络代理设置，最好设置成http&#x2F;https代理（因为如果不手动设置其他代理软件，可能会自动配置代理，导致设置不生效问题），代理服务器可查看自己的 <code>Charles</code> 设置，默认： <code>127.0.0.1:8888</code> 当 <code>Charles</code> 启动时，查看相关对口是否启动代理服务器进程</li>
+<li>确认本地网络代理设置，最好设置成http&#x2F;https代理（因为如果不手动设置其他代理软件，可能会自动配置代理，导致设置不生效问题），代理服务器可查看自己的 <code>Charles</code> 设置，默认： <code>127.0.0.1:8888</code> 当 <code>Charles</code> 启动时，查看相关对口是否启动代理服务器进程(macOS命令：lsof -i :8888 | grep Charles)</li>
 <li>浏览器代理插件设置，如：SwitchyOmega等相关代理插件，要设置为系统代理或者新增情景模式为 Charles代理</li>
 </ul>
 <p>上面的所有问题都检查一遍，我相信应该能解决您的问题了!!!!!</p>
