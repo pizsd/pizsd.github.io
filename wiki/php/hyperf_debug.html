@@ -28,18 +28,18 @@
 <meta property="og:site_name" content="林曦">
 <meta property="og:description" content="准备 如果使用PhpStorm调试，仅需要上图所说的这几步  安装 Xdebug 或者 Zend Debugger. 开启 Start Listening for PHP Debug Connections. 配置 Debug 端口，别忘记勾选 Can accept external connections. 打好断点，启动网页进行调试.  安装安装boost扩展macOS 1brew insta">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://img-blog.csdnimg.cn/20210120171011141.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3UwMTE4MjkwMjM=,size_16,color_FFFFFF,t_70">
-<meta property="og:image" content="https://img-blog.csdnimg.cn/20210120172810961.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3UwMTE4MjkwMjM=,size_16,color_FFFFFF,t_70">
-<meta property="og:image" content="https://img-blog.csdnimg.cn/20210120172947817.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3UwMTE4MjkwMjM=,size_16,color_FFFFFF,t_70">
-<meta property="og:image" content="https://img-blog.csdnimg.cn/20210120173025952.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3UwMTE4MjkwMjM=,size_16,color_FFFFFF,t_70">
-<meta property="article:published_time" content="2023-01-17T02:29:52.941Z">
-<meta property="article:modified_time" content="2023-01-17T02:29:52.941Z">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/pizsd/blogimgs@latest/php/hyperf_debug_1.png">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/pizsd/blogimgs@latest/php/hyperf_debug_2.png">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/pizsd/blogimgs@latest/php/hyperf_debug_3.png">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/pizsd/blogimgs@latest/php/hyperf_debug_4.png">
+<meta property="article:published_time" content="2023-06-01T06:46:02.144Z">
+<meta property="article:modified_time" content="2023-06-01T06:45:35.235Z">
 <meta property="article:author" content="pizsd">
 <meta property="article:tag" content="Hyperf">
 <meta property="article:tag" content="Yasd">
 <meta property="article:tag" content="Debug">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20210120171011141.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3UwMTE4MjkwMjM=,size_16,color_FFFFFF,t_70">
+<meta name="twitter:image" content="https://fastly.jsdelivr.net/gh/pizsd/blogimgs@latest/php/hyperf_debug_1.png">
   
   
 
@@ -91,11 +91,11 @@
 
   
   
-<div class="bread-nav fs12"><div id="breadcrumb"><a class="cap breadcrumb" id="home" href="/">主页</a><span class="sep"></span><a class="cap breadcrumb" id="menu" href="/wiki/">WIKI</a><span class="sep"></span><a class="cap breadcrumb" id="proj" href="/wiki/php/index.html">PHP</a></div><div id="post-meta">更新于&nbsp;<time datetime="2023-01-17T02:29:52.941Z">2023-01-17</time></div></div>
+<div class="bread-nav fs12"><div id="breadcrumb"><a class="cap breadcrumb" id="home" href="/">主页</a><span class="sep"></span><a class="cap breadcrumb" id="menu" href="/wiki/">WIKI</a><span class="sep"></span><a class="cap breadcrumb" id="proj" href="/wiki/php/index.html">PHP</a></div><div id="post-meta">更新于&nbsp;<time datetime="2023-06-01T06:45:35.235Z">2023-06-01</time></div></div>
 
   <article class='content md wiki'>
   <h1 class="article-title"><span>基于Yasd的Hyperf框架调试</span></h1>
-  <h2 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h2><p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://img-blog.csdnimg.cn/20210120171011141.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3UwMTE4MjkwMjM=,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+  <h2 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h2><p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://fastly.jsdelivr.net/gh/pizsd/blogimgs@latest/php/hyperf_debug_1.png" alt="在这里插入图片描述"></p>
 <p>如果使用PhpStorm调试，仅需要上图所说的这几步</p>
 <ul>
 <li>安装 Xdebug 或者 Zend Debugger.</li>
@@ -126,8 +126,8 @@
 <h3 id="配置-PhpStorm"><a href="#配置-PhpStorm" class="headerlink" title="配置 PhpStorm"></a>配置 PhpStorm</h3><h4 id="PHP-运行环境设置"><a href="#PHP-运行环境设置" class="headerlink" title="PHP 运行环境设置"></a>PHP 运行环境设置</h4><p>由于yasd是基于php -e 命令生成的额外调试信息，而PhpStorm默认的调试并不带有 -e 的参数，所以我们需要在单元测试前做一些改进，我是通过编写一个shell脚本的方式来实现的</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cat</span> /bin/php</span><br><span class="line"></span><br><span class="line"><span class="comment">#!/usr/bin/env zsh</span></span><br><span class="line">/usr/local/bin/php -e <span class="string">&quot;<span class="variable">$@</span>&quot;</span></span><br></pre></td></tr></table></figure>
 
-<h4 id="PhpStorm设置"><a href="#PhpStorm设置" class="headerlink" title="PhpStorm设置"></a>PhpStorm设置</h4><p>然后在PhpStorm中添加该脚本作为php的解释器，在PhpStorm的Preferences -&gt; Languages &amp; Frameworks -&gt; PHP面板中添加CLI Interpreters，选择配置的解释器后点击Apply。<br><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://img-blog.csdnimg.cn/20210120172810961.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3UwMTE4MjkwMjM=,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
-<h4 id="PHPUnit设置"><a href="#PHPUnit设置" class="headerlink" title="PHPUnit设置"></a>PHPUnit设置</h4><p>因为Hyperf是基于Swoole协程框架，原生的phpunit是无法调试的，需要使用Hyperf提供的co-phpunit，可以在PhpStorm的Preferences -&gt; Languages &amp; Frameworks -&gt; PHP -&gt; Test Frameworks面板中本地环境<br>点击面板中的“+”添加PHPUnit Local，选择Path to phpunit.phar，在Path中选择当前项目的vendor&#x2F;bin&#x2F;co-phpunit文件，在Run Tester的Default configration file中选择当前项目中的phpunit.xml文件，点击Apply。<br><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://img-blog.csdnimg.cn/20210120172947817.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3UwMTE4MjkwMjM=,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>调试单元测试前，需要开启 Start Listening for PHP Debug Connections.<br><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://img-blog.csdnimg.cn/20210120173025952.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3UwMTE4MjkwMjM=,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>之后就可以像之前调试Lavavel项目那样断点调试Hyperf了。</p>
+<h4 id="PhpStorm设置"><a href="#PhpStorm设置" class="headerlink" title="PhpStorm设置"></a>PhpStorm设置</h4><p>然后在PhpStorm中添加该脚本作为php的解释器，在PhpStorm的Preferences -&gt; Languages &amp; Frameworks -&gt; PHP面板中添加CLI Interpreters，选择配置的解释器后点击Apply。<br><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://fastly.jsdelivr.net/gh/pizsd/blogimgs@latest/php/hyperf_debug_2.png" alt="在这里插入图片描述"></p>
+<h4 id="PHPUnit设置"><a href="#PHPUnit设置" class="headerlink" title="PHPUnit设置"></a>PHPUnit设置</h4><p>因为Hyperf是基于Swoole协程框架，原生的phpunit是无法调试的，需要使用Hyperf提供的co-phpunit，可以在PhpStorm的Preferences -&gt; Languages &amp; Frameworks -&gt; PHP -&gt; Test Frameworks面板中本地环境<br>点击面板中的“+”添加PHPUnit Local，选择Path to phpunit.phar，在Path中选择当前项目的vendor&#x2F;bin&#x2F;co-phpunit文件，在Run Tester的Default configration file中选择当前项目中的phpunit.xml文件，点击Apply。<br><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://fastly.jsdelivr.net/gh/pizsd/blogimgs@latest/php/hyperf_debug_3.png" alt="在这里插入图片描述"><br>调试单元测试前，需要开启 Start Listening for PHP Debug Connections.<br><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://fastly.jsdelivr.net/gh/pizsd/blogimgs@latest/php/hyperf_debug_4.png" alt="在这里插入图片描述"><br>之后就可以像之前调试Lavavel项目那样断点调试Hyperf了。</p>
 <h3 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h3><p>当开启Start Listening for PHP Debug Connections（PHP调试连接监听器）后，不论是使用PHPStorm的Debug还是Run都会触发断点调试，所以用完后记得停止PHP调试连接监听器。</p>
 <h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><p><a target="_blank" rel="noopener" href="https://huanghantao.github.io/yasd-wiki/#/">Yasd调试器官方文档</a><br><a target="_blank" rel="noopener" href="https://course.swoole-cloud.com/course-video/135">另一个Swoole调试器 - Yasd</a><br><a target="_blank" rel="noopener" href="https://course.swoole-cloud.com/course-video/136">在IDE中使用yasd调试器</a></p>
 
