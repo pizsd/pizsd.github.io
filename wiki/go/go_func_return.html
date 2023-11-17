@@ -18,18 +18,18 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="theme-color" content="#f8f8f8">
-  <title>Go：Golang中命名返回值 - 林曦</title>
+  <title>Go：命名返回值 - 林曦</title>
 
   
     <meta name="description" content="写法 如果 func 定义，需要指定参数名，应该将返回参数用 () 包起来  12345&#x2F;&#x2F; 这样写法更简洁，不用在方法体内在定义多余的变量func All() (users []User) &amp;#123; database.DB.Find(&amp;users) return users&amp;#125;  好处 命名返回值在函数开始时会被自动初始化 命名返回值可以使函数更加清晰和自说明 命名返回值的作">
 <meta property="og:type" content="website">
-<meta property="og:title" content="Golang中命名返回值">
+<meta property="og:title" content="命名返回值">
 <meta property="og:url" content="https://pizsd.github.io/wiki/go/go_func_return.html">
 <meta property="og:site_name" content="林曦">
 <meta property="og:description" content="写法 如果 func 定义，需要指定参数名，应该将返回参数用 () 包起来  12345&#x2F;&#x2F; 这样写法更简洁，不用在方法体内在定义多余的变量func All() (users []User) &amp;#123; database.DB.Find(&amp;users) return users&amp;#125;  好处 命名返回值在函数开始时会被自动初始化 命名返回值可以使函数更加清晰和自说明 命名返回值的作">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2023-11-17T03:34:44.205Z">
-<meta property="article:modified_time" content="2023-11-17T03:34:44.205Z">
+<meta property="article:published_time" content="2023-11-17T03:52:52.193Z">
+<meta property="article:modified_time" content="2023-11-17T03:52:52.193Z">
 <meta property="article:author" content="pizsd">
 <meta property="article:tag" content="Go">
 <meta name="twitter:card" content="summary">
@@ -68,7 +68,7 @@
 
 <div class="widgets">
 
-<div class="widget-wrap multi" id="toc"><div class="widget-header cap dis-select"><span class="name">基础知识踩坑</span></div><div class="widget-body fs14"><div class="doc-tree"><a class="doc-tree-link" href="/wiki/go/index.html"><span class="toc-text">Golang中的断言</span></a></div><div class="doc-tree"><a class="doc-tree-link" href="/wiki/go/go_tag.html"><span class="toc-text">Golang中那些“奇怪”的注释</span></a></div><div class="doc-tree"><a class="doc-tree-link" href="/wiki/go/go_map.html"><span class="toc-text">Golang中Map的声明与使用</span></a></div><div class="doc-tree active"><a class="doc-tree-link active" href="/wiki/go/go_func_return.html"><span class="toc-text">Golang中命名返回值</span></a><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%86%99%E6%B3%95"><span class="toc-text">写法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A5%BD%E5%A4%84"><span class="toc-text">好处</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="toc-text">注意事项</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B"><span class="toc-text">示例</span></a></li></ol></div><div class="doc-tree"><a class="doc-tree-link" href="/wiki/go/go_array.html"><span class="toc-text">Golang数组中的一些细节</span></a></div><div class="doc-tree"><a class="doc-tree-link" href="/wiki/go/go_fmt_printf.html"><span class="toc-text">fmt包中的printf()小技巧</span></a></div><div class="doc-tree"><a class="doc-tree-link" href="/wiki/go/go_test_benchmark.html"><span class="toc-text">Golang中的基准测试</span></a></div><div class="doc-tree"><a class="doc-tree-link" href="/wiki/go/binary_sort_tree.html"><span class="toc-text">Golang实现二叉排序树的插入&查找&删除</span></a></div><div class="doc-tree"><a class="doc-tree-link" href="/wiki/go/go_build_gcflags.html"><span class="toc-text">Golang中内存逃逸分析</span></a></div><div class="doc-tree"><a class="doc-tree-link" href="/wiki/go/go_interface_nil.html"><span class="toc-text">interface赋值为nil，类型变化</span></a></div><div class="doc-tree"><a class="doc-tree-link" href="/wiki/go/go_interface_%20satisfaction_check.html"><span class="toc-text">Golang中接口满足度检查(interface satisfaction check)</span></a></div></div></div>
+<div class="widget-wrap multi" id="toc"><div class="widget-header cap dis-select"><span class="name">基础知识踩坑</span></div><div class="widget-body fs14"><div class="doc-tree"><a class="doc-tree-link" href="/wiki/go/index.html"><span class="toc-text">断言</span></a></div><div class="doc-tree"><a class="doc-tree-link" href="/wiki/go/go_tag.html"><span class="toc-text">那些“奇怪”的注释</span></a></div><div class="doc-tree"><a class="doc-tree-link" href="/wiki/go/go_map.html"><span class="toc-text">Map的声明与使用</span></a></div><div class="doc-tree active"><a class="doc-tree-link active" href="/wiki/go/go_func_return.html"><span class="toc-text">命名返回值</span></a><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%86%99%E6%B3%95"><span class="toc-text">写法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A5%BD%E5%A4%84"><span class="toc-text">好处</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="toc-text">注意事项</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B"><span class="toc-text">示例</span></a></li></ol></div><div class="doc-tree"><a class="doc-tree-link" href="/wiki/go/go_array.html"><span class="toc-text">数组中的一些细节</span></a></div><div class="doc-tree"><a class="doc-tree-link" href="/wiki/go/go_fmt_printf.html"><span class="toc-text">fmt包中的printf()小技巧</span></a></div><div class="doc-tree"><a class="doc-tree-link" href="/wiki/go/go_test_benchmark.html"><span class="toc-text">基准测试</span></a></div><div class="doc-tree"><a class="doc-tree-link" href="/wiki/go/binary_sort_tree.html"><span class="toc-text">二叉排序树的插入&查找&删除</span></a></div><div class="doc-tree"><a class="doc-tree-link" href="/wiki/go/go_build_gcflags.html"><span class="toc-text">内存逃逸分析</span></a></div><div class="doc-tree"><a class="doc-tree-link" href="/wiki/go/go_interface_nil.html"><span class="toc-text">interface赋值为nil，类型变化</span></a></div><div class="doc-tree"><a class="doc-tree-link" href="/wiki/go/go_defer_execution_timing.html"><span class="toc-text">defer函数执行时机</span></a></div><div class="doc-tree"><a class="doc-tree-link" href="/wiki/go/go_interface_%20satisfaction_check.html"><span class="toc-text">接口满足度检查(interface satisfaction check)</span></a></div></div></div>
 
 
 
@@ -84,10 +84,10 @@
 
   
   
-<div class="bread-nav fs12"><div id="breadcrumb"><a class="cap breadcrumb" id="home" href="/">主页</a><span class="sep"></span><a class="cap breadcrumb" id="menu" href="/wiki/">WIKI</a><span class="sep"></span><a class="cap breadcrumb" id="proj" href="/wiki/go/index.html">Golang</a></div><div id="post-meta">更新于&nbsp;<time datetime="2023-11-17T03:34:44.205Z">2023-11-17</time></div></div>
+<div class="bread-nav fs12"><div id="breadcrumb"><a class="cap breadcrumb" id="home" href="/">主页</a><span class="sep"></span><a class="cap breadcrumb" id="menu" href="/wiki/">WIKI</a><span class="sep"></span><a class="cap breadcrumb" id="proj" href="/wiki/go/index.html">Golang</a></div><div id="post-meta">更新于&nbsp;<time datetime="2023-11-17T03:52:52.193Z">2023-11-17</time></div></div>
 
   <article class='content md wiki'>
-  <h1 class="article-title"><span>Golang中命名返回值</span></h1>
+  <h1 class="article-title"><span>命名返回值</span></h1>
   <h3 id="写法"><a href="#写法" class="headerlink" title="写法"></a>写法</h3><blockquote>
 <p>如果 <code>func</code> 定义，需要指定参数名，应该将返回参数用 <code>()</code> 包起来</p>
 </blockquote>
@@ -129,7 +129,7 @@
 
   </article>
   
-<div class="related-wrap reveal" id="read-next"><section class="header cap theme"><span>接下来阅读</span></section><section class="body fs14"><a id="next" href="/wiki/go/go_array.html">Golang数组中的一些细节<span class="note">下一篇</span></a><div class="line"></div><a id="prev" href="/wiki/go/go_map.html">Golang中Map的声明与使用<span class="note">上一篇</span></a></section></div>
+<div class="related-wrap reveal" id="read-next"><section class="header cap theme"><span>接下来阅读</span></section><section class="body fs14"><a id="next" href="/wiki/go/go_array.html">数组中的一些细节<span class="note">下一篇</span></a><div class="line"></div><a id="prev" href="/wiki/go/go_map.html">Map的声明与使用<span class="note">上一篇</span></a></section></div>
 
   
 

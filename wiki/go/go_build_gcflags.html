@@ -18,18 +18,18 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="theme-color" content="#f8f8f8">
-  <title>Go：Golang中内存逃逸分析 - 林曦</title>
+  <title>Go：内存逃逸分析 - 林曦</title>
 
   
     <meta name="description" content="解释内存逃逸指的是在函数执行期间分配的变量或对象逃离了函数的作用域，仍然可以被其他部分引用。这种情况下，编译器会将变量或对象分配到堆上，并返回一个指向该内存地址的指针，以便在函数外部仍然能够访问它。 内存逃逸分析的优势是减少了对堆内存的分配和垃圾回收的压力，提高程序的性能。通过将对象分配在栈上而不是堆上，可以减少内存分配和垃圾回收的开销，并且更容易进行优化。 在Go语言中，编译器会自动进行内存逃逸">
 <meta property="og:type" content="website">
-<meta property="og:title" content="Golang中内存逃逸分析">
+<meta property="og:title" content="内存逃逸分析">
 <meta property="og:url" content="https://pizsd.github.io/wiki/go/go_build_gcflags.html">
 <meta property="og:site_name" content="林曦">
 <meta property="og:description" content="解释内存逃逸指的是在函数执行期间分配的变量或对象逃离了函数的作用域，仍然可以被其他部分引用。这种情况下，编译器会将变量或对象分配到堆上，并返回一个指向该内存地址的指针，以便在函数外部仍然能够访问它。 内存逃逸分析的优势是减少了对堆内存的分配和垃圾回收的压力，提高程序的性能。通过将对象分配在栈上而不是堆上，可以减少内存分配和垃圾回收的开销，并且更容易进行优化。 在Go语言中，编译器会自动进行内存逃逸">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2023-07-21T10:15:57.107Z">
-<meta property="article:modified_time" content="2023-07-21T10:15:57.107Z">
+<meta property="article:published_time" content="2023-11-17T03:52:24.230Z">
+<meta property="article:modified_time" content="2023-11-17T03:52:24.230Z">
 <meta property="article:author" content="pizsd">
 <meta property="article:tag" content="Go">
 <meta name="twitter:card" content="summary">
@@ -68,7 +68,7 @@
 
 <div class="widgets">
 
-<div class="widget-wrap multi" id="toc"><div class="widget-header cap dis-select"><span class="name">基础知识踩坑</span></div><div class="widget-body fs14"><div class="doc-tree"><a class="doc-tree-link" href="/wiki/go/index.html"><span class="toc-text">Golang中的断言</span></a></div><div class="doc-tree"><a class="doc-tree-link" href="/wiki/go/go_tag.html"><span class="toc-text">Golang中那些“奇怪”的注释</span></a></div><div class="doc-tree"><a class="doc-tree-link" href="/wiki/go/go_map.html"><span class="toc-text">Golang中Map的声明与使用</span></a></div><div class="doc-tree"><a class="doc-tree-link" href="/wiki/go/go_func_return.html"><span class="toc-text">Golang中命名返回值</span></a></div><div class="doc-tree"><a class="doc-tree-link" href="/wiki/go/go_array.html"><span class="toc-text">Golang数组中的一些细节</span></a></div><div class="doc-tree"><a class="doc-tree-link" href="/wiki/go/go_fmt_printf.html"><span class="toc-text">fmt包中的printf()小技巧</span></a></div><div class="doc-tree"><a class="doc-tree-link" href="/wiki/go/go_test_benchmark.html"><span class="toc-text">Golang中的基准测试</span></a></div><div class="doc-tree"><a class="doc-tree-link" href="/wiki/go/binary_sort_tree.html"><span class="toc-text">Golang实现二叉排序树的插入&查找&删除</span></a></div><div class="doc-tree active"><a class="doc-tree-link active" href="/wiki/go/go_build_gcflags.html"><span class="toc-text">Golang中内存逃逸分析</span></a><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A7%A3%E9%87%8A"><span class="toc-text">解释</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%86%E6%9E%90"><span class="toc-text">分析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B"><span class="toc-text">示例</span></a></li></ol></div><div class="doc-tree"><a class="doc-tree-link" href="/wiki/go/go_interface_nil.html"><span class="toc-text">interface赋值为nil，类型变化</span></a></div><div class="doc-tree"><a class="doc-tree-link" href="/wiki/go/go_interface_%20satisfaction_check.html"><span class="toc-text">Golang中接口满足度检查(interface satisfaction check)</span></a></div></div></div>
+<div class="widget-wrap multi" id="toc"><div class="widget-header cap dis-select"><span class="name">基础知识踩坑</span></div><div class="widget-body fs14"><div class="doc-tree"><a class="doc-tree-link" href="/wiki/go/index.html"><span class="toc-text">断言</span></a></div><div class="doc-tree"><a class="doc-tree-link" href="/wiki/go/go_tag.html"><span class="toc-text">那些“奇怪”的注释</span></a></div><div class="doc-tree"><a class="doc-tree-link" href="/wiki/go/go_map.html"><span class="toc-text">Map的声明与使用</span></a></div><div class="doc-tree"><a class="doc-tree-link" href="/wiki/go/go_func_return.html"><span class="toc-text">命名返回值</span></a></div><div class="doc-tree"><a class="doc-tree-link" href="/wiki/go/go_array.html"><span class="toc-text">数组中的一些细节</span></a></div><div class="doc-tree"><a class="doc-tree-link" href="/wiki/go/go_fmt_printf.html"><span class="toc-text">fmt包中的printf()小技巧</span></a></div><div class="doc-tree"><a class="doc-tree-link" href="/wiki/go/go_test_benchmark.html"><span class="toc-text">基准测试</span></a></div><div class="doc-tree"><a class="doc-tree-link" href="/wiki/go/binary_sort_tree.html"><span class="toc-text">二叉排序树的插入&查找&删除</span></a></div><div class="doc-tree active"><a class="doc-tree-link active" href="/wiki/go/go_build_gcflags.html"><span class="toc-text">内存逃逸分析</span></a><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A7%A3%E9%87%8A"><span class="toc-text">解释</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%86%E6%9E%90"><span class="toc-text">分析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B"><span class="toc-text">示例</span></a></li></ol></div><div class="doc-tree"><a class="doc-tree-link" href="/wiki/go/go_interface_nil.html"><span class="toc-text">interface赋值为nil，类型变化</span></a></div><div class="doc-tree"><a class="doc-tree-link" href="/wiki/go/go_defer_execution_timing.html"><span class="toc-text">defer函数执行时机</span></a></div><div class="doc-tree"><a class="doc-tree-link" href="/wiki/go/go_interface_%20satisfaction_check.html"><span class="toc-text">接口满足度检查(interface satisfaction check)</span></a></div></div></div>
 
 
 
@@ -84,10 +84,10 @@
 
   
   
-<div class="bread-nav fs12"><div id="breadcrumb"><a class="cap breadcrumb" id="home" href="/">主页</a><span class="sep"></span><a class="cap breadcrumb" id="menu" href="/wiki/">WIKI</a><span class="sep"></span><a class="cap breadcrumb" id="proj" href="/wiki/go/index.html">Golang</a></div><div id="post-meta">更新于&nbsp;<time datetime="2023-07-21T10:15:57.107Z">2023-07-21</time></div></div>
+<div class="bread-nav fs12"><div id="breadcrumb"><a class="cap breadcrumb" id="home" href="/">主页</a><span class="sep"></span><a class="cap breadcrumb" id="menu" href="/wiki/">WIKI</a><span class="sep"></span><a class="cap breadcrumb" id="proj" href="/wiki/go/index.html">Golang</a></div><div id="post-meta">更新于&nbsp;<time datetime="2023-11-17T03:52:24.230Z">2023-11-17</time></div></div>
 
   <article class='content md wiki'>
-  <h1 class="article-title"><span>Golang中内存逃逸分析</span></h1>
+  <h1 class="article-title"><span>内存逃逸分析</span></h1>
   <h3 id="解释"><a href="#解释" class="headerlink" title="解释"></a>解释</h3><p>内存逃逸指的是在函数执行期间分配的变量或对象逃离了函数的作用域，仍然可以被其他部分引用。这种情况下，编译器会将变量或对象分配到堆上，并返回一个指向该内存地址的指针，以便在函数外部仍然能够访问它。</p>
 <p>内存逃逸分析的优势是减少了对堆内存的分配和垃圾回收的压力，提高程序的性能。通过将对象分配在栈上而不是堆上，可以减少内存分配和垃圾回收的开销，并且更容易进行优化。</p>
 <p>在Go语言中，编译器会自动进行内存逃逸分析，以决定变量或对象是否需要在堆上分配内存。如果一个变量或对象被判定为不逃逸，则会在栈上分配内存；如果被判定为逃逸，则会在堆上分配内存。</p>
@@ -124,7 +124,7 @@
 
   </article>
   
-<div class="related-wrap reveal" id="read-next"><section class="header cap theme"><span>接下来阅读</span></section><section class="body fs14"><a id="next" href="/wiki/go/go_interface_nil.html">interface赋值为nil，类型变化<span class="note">下一篇</span></a><div class="line"></div><a id="prev" href="/wiki/go/binary_sort_tree.html">Golang实现二叉排序树的插入&查找&删除<span class="note">上一篇</span></a></section></div>
+<div class="related-wrap reveal" id="read-next"><section class="header cap theme"><span>接下来阅读</span></section><section class="body fs14"><a id="next" href="/wiki/go/go_interface_nil.html">interface赋值为nil，类型变化<span class="note">下一篇</span></a><div class="line"></div><a id="prev" href="/wiki/go/binary_sort_tree.html">二叉排序树的插入&查找&删除<span class="note">上一篇</span></a></section></div>
 
   
 
