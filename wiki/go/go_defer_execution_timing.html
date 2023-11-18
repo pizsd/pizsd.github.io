@@ -18,18 +18,18 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="theme-color" content="#f8f8f8">
-  <title>Go：defer函数执行时机 - 林曦</title>
+  <title>Go：defer语句执行时机 - 林曦</title>
 
   
     <meta name="description" content="结论defer 是在函数代码体执行完之后，函数返回之前执行的，多个 defer 之间按照后进先出（LIFO）的顺序执行。这里还有个问题需要说明，return 并非原子操作，所以在有 defer 的情况下，函数的执行分为4个阶段，分别如下：  真正的函数体执行业务逻辑 函数返回值赋值，就是将真正的函数体执行结果赋值给返回值 defer 函数要执行的业务逻辑，注意这里 defer 中函数处理中有可能会">
 <meta property="og:type" content="website">
-<meta property="og:title" content="defer函数执行时机">
+<meta property="og:title" content="defer语句执行时机">
 <meta property="og:url" content="https://pizsd.github.io/wiki/go/go_defer_execution_timing.html">
 <meta property="og:site_name" content="林曦">
 <meta property="og:description" content="结论defer 是在函数代码体执行完之后，函数返回之前执行的，多个 defer 之间按照后进先出（LIFO）的顺序执行。这里还有个问题需要说明，return 并非原子操作，所以在有 defer 的情况下，函数的执行分为4个阶段，分别如下：  真正的函数体执行业务逻辑 函数返回值赋值，就是将真正的函数体执行结果赋值给返回值 defer 函数要执行的业务逻辑，注意这里 defer 中函数处理中有可能会">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2023-11-18T11:46:07.129Z">
-<meta property="article:modified_time" content="2023-11-18T11:46:07.129Z">
+<meta property="article:published_time" content="2023-11-18T12:21:57.750Z">
+<meta property="article:modified_time" content="2023-11-18T12:21:57.750Z">
 <meta property="article:author" content="pizsd">
 <meta property="article:tag" content="Go">
 <meta name="twitter:card" content="summary">
@@ -68,7 +68,7 @@
 
 <div class="widgets">
 
-<div class="widget-wrap multi" id="toc"><div class="widget-header cap dis-select"><span class="name">基础知识踩坑</span></div><div class="widget-body fs14"><div class="doc-tree"><a class="doc-tree-link" href="/wiki/go/index.html"><span class="toc-text">断言</span></a></div><div class="doc-tree"><a class="doc-tree-link" href="/wiki/go/go_tag.html"><span class="toc-text">那些“奇怪”的注释</span></a></div><div class="doc-tree"><a class="doc-tree-link" href="/wiki/go/go_map.html"><span class="toc-text">Map的声明与使用</span></a></div><div class="doc-tree"><a class="doc-tree-link" href="/wiki/go/go_named_return_value.html"><span class="toc-text">命名返回值</span></a></div><div class="doc-tree"><a class="doc-tree-link" href="/wiki/go/go_array.html"><span class="toc-text">数组中的一些细节</span></a></div><div class="doc-tree"><a class="doc-tree-link" href="/wiki/go/go_fmt_printf.html"><span class="toc-text">fmt包中的printf()小技巧</span></a></div><div class="doc-tree"><a class="doc-tree-link" href="/wiki/go/go_test_benchmark.html"><span class="toc-text">基准测试</span></a></div><div class="doc-tree"><a class="doc-tree-link" href="/wiki/go/binary_sort_tree.html"><span class="toc-text">二叉排序树的插入&查找&删除</span></a></div><div class="doc-tree"><a class="doc-tree-link" href="/wiki/go/go_build_gcflags.html"><span class="toc-text">内存逃逸分析</span></a></div><div class="doc-tree"><a class="doc-tree-link" href="/wiki/go/go_interface_nil.html"><span class="toc-text">interface赋值为nil，类型变化</span></a></div><div class="doc-tree active"><a class="doc-tree-link active" href="/wiki/go/go_defer_execution_timing.html"><span class="toc-text">defer函数执行时机</span></a><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BB%93%E8%AE%BA"><span class="toc-text">结论</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B"><span class="toc-text">示例</span></a></li></ol></div><div class="doc-tree"><a class="doc-tree-link" href="/wiki/go/go_interface_%20satisfaction_check.html"><span class="toc-text">接口满足度检查(interface satisfaction check)</span></a></div></div></div>
+<div class="widget-wrap multi" id="toc"><div class="widget-header cap dis-select"><span class="name">基础知识踩坑</span></div><div class="widget-body fs14"><div class="doc-tree"><a class="doc-tree-link" href="/wiki/go/index.html"><span class="toc-text">断言</span></a></div><div class="doc-tree"><a class="doc-tree-link" href="/wiki/go/go_tag.html"><span class="toc-text">那些“奇怪”的注释</span></a></div><div class="doc-tree"><a class="doc-tree-link" href="/wiki/go/go_map.html"><span class="toc-text">Map的声明与使用</span></a></div><div class="doc-tree"><a class="doc-tree-link" href="/wiki/go/go_named_return_value.html"><span class="toc-text">命名返回值</span></a></div><div class="doc-tree"><a class="doc-tree-link" href="/wiki/go/go_array.html"><span class="toc-text">数组中的一些细节</span></a></div><div class="doc-tree"><a class="doc-tree-link" href="/wiki/go/go_fmt_printf.html"><span class="toc-text">fmt包中的printf()小技巧</span></a></div><div class="doc-tree"><a class="doc-tree-link" href="/wiki/go/go_test_benchmark.html"><span class="toc-text">基准测试</span></a></div><div class="doc-tree"><a class="doc-tree-link" href="/wiki/go/binary_sort_tree.html"><span class="toc-text">二叉排序树的插入&查找&删除</span></a></div><div class="doc-tree"><a class="doc-tree-link" href="/wiki/go/go_build_gcflags.html"><span class="toc-text">内存逃逸分析</span></a></div><div class="doc-tree"><a class="doc-tree-link" href="/wiki/go/go_interface_nil.html"><span class="toc-text">interface赋值为nil，类型变化</span></a></div><div class="doc-tree active"><a class="doc-tree-link active" href="/wiki/go/go_defer_execution_timing.html"><span class="toc-text">defer语句执行时机</span></a><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BB%93%E8%AE%BA"><span class="toc-text">结论</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B"><span class="toc-text">示例</span></a></li></ol></div><div class="doc-tree"><a class="doc-tree-link" href="/wiki/go/go_interface_%20satisfaction_check.html"><span class="toc-text">接口满足度检查(interface satisfaction check)</span></a></div></div></div>
 
 
 
@@ -84,10 +84,10 @@
 
   
   
-<div class="bread-nav fs12"><div id="breadcrumb"><a class="cap breadcrumb" id="home" href="/">主页</a><span class="sep"></span><a class="cap breadcrumb" id="menu" href="/wiki/">WIKI</a><span class="sep"></span><a class="cap breadcrumb" id="proj" href="/wiki/go/index.html">Golang</a></div><div id="post-meta">更新于&nbsp;<time datetime="2023-11-18T11:46:07.129Z">2023-11-18</time></div></div>
+<div class="bread-nav fs12"><div id="breadcrumb"><a class="cap breadcrumb" id="home" href="/">主页</a><span class="sep"></span><a class="cap breadcrumb" id="menu" href="/wiki/">WIKI</a><span class="sep"></span><a class="cap breadcrumb" id="proj" href="/wiki/go/index.html">Golang</a></div><div id="post-meta">更新于&nbsp;<time datetime="2023-11-18T12:21:57.750Z">2023-11-18</time></div></div>
 
   <article class='content md wiki'>
-  <h1 class="article-title"><span>defer函数执行时机</span></h1>
+  <h1 class="article-title"><span>defer语句执行时机</span></h1>
   <h3 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h3><p><code>defer</code> 是在函数代码体执行完之后，函数返回之前执行的，多个 <code>defer</code> 之间按照后进先出（LIFO）的顺序执行。<br>这里还有个问题需要说明，<code>return</code> 并非原子操作，所以在有 <code>defer</code> 的情况下，函数的执行分为4个阶段，分别如下：</p>
 <ol>
 <li>真正的函数体执行业务逻辑</li>
