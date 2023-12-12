@@ -4,7 +4,7 @@
 <head>
   <meta name="generator" content="Hexo 6.2.0">
   <meta charset="utf-8">
-  <meta name="robots" content="noindex,follow">
+  
 
   <meta http-equiv='x-dns-prefetch-control' content='on' />
   <link rel='dns-prefetch' href='https://fastly.jsdelivr.net'>
@@ -18,14 +18,18 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="theme-color" content="#f8f8f8">
-  <title>归档 - 林曦</title>
+  <title>Mysql 中索引长度的计算方式 - 林曦</title>
 
   
-    <meta property="og:type" content="website">
-<meta property="og:title" content="归档">
-<meta property="og:url" content="https://pizsd.github.io/archives/page/2/index.html">
+    <meta name="description" content="Mysql 通过执行计划（explain）中的key_len(索引长度)来判断是否合理使用到联合索引，索引长度的计算方式">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Mysql 中索引长度的计算方式">
+<meta property="og:url" content="https://pizsd.github.io/2023/12/12/mysql_idx_ken_len/index.html">
 <meta property="og:site_name" content="林曦">
+<meta property="og:description" content="Mysql 通过执行计划（explain）中的key_len(索引长度)来判断是否合理使用到联合索引，索引长度的计算方式">
 <meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-12-12T02:20:12.721Z">
+<meta property="article:modified_time" content="2023-12-12T02:27:26.318Z">
 <meta property="article:author" content="pizsd">
 <meta name="twitter:card" content="summary">
   
@@ -49,8 +53,10 @@
   
 
 
+
+
   <div class='l_body' id='start'>
-    <aside class='l_left' layout=''>
+    <aside class='l_left' layout='post'>
     
 
 
@@ -60,368 +66,68 @@
 <nav class="menu dis-select"><a class="nav-item active" href="/">博客</a><a class="nav-item" href="/wiki/">WIKI</a><a class="nav-item" href="/about/">关于</a></nav></header>
 
 <div class="widgets">
-<div class="widget-wrap" id="markdown"><div class="widget-header cap dis-select"><span class="name">有朋自远方来，不亦乐乎👏🏻</span></div><div class="widget-body fs14"><p>这里是<code>PIZSD</code>的个人博客<br><strong>📖        内容</strong><br>记录工作，学习中遇到问题<br>希望对你有帮助。<br><strong>💡思考</strong><br>宇宙中所有星球都“悬浮”在太空中<br>到底是什么力量在支撑它们？</p>
-</div></div>
 
-<div class="widget-wrap" id="recent"><div class="widget-header cap dis-select"><span class="name">最近更新</span></div><div class="widget-body fs14"><div class="more-item"><a class="title" href="/2023/12/12/mysql_idx_ken_len/">Mysql 中索引长度的计算方式</a></div><div class="more-item"><a class="title" href="/2022/07/07/hello-world/">Hello World</a></div><div class="more-item"><a class="title" href="/2022/11/01/mysql_innodb_clustered_index/">Mysql InnoDB中的聚簇索引</a></div><div class="more-item"><a class="title" href="/2022/09/30/macos_hotkey/">macOS 命令行快捷键(比较常用)</a></div><div class="more-item"><a class="title" href="/2022/09/30/mac_iredis/">mac Homebrew修改指定软件的版本</a></div></div></div>
+<div class="widget-wrap single" id="toc"><div class="widget-header cap dis-select"><span class="name">本文目录</span></div><div class="widget-body fs14"><div class="doc-tree active"><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#key-len-%E7%9A%84%E8%AE%A1%E7%AE%97%E6%96%B9%E5%BC%8F"><span class="toc-text">key_len 的计算方式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%A4%E6%96%AD%E4%BE%9D%E6%8D%AE"><span class="toc-text">判断依据</span></a></li></ol></div></div></div>
+
+
 </div>
 
 
     </aside>
-    <div class='l_main list'>
+    <div class='l_main'>
       
-  
-
-<header class="header mobile-only">
-
-<div class="logo-wrap"><a class="avatar" href="/about/"><div class="bg" style="opacity:0;background-image:url(https://fastly.jsdelivr.net/gh/cdn-x/placeholder@1.0.2/avatar/round/rainbow64@3x.webp);"></div><img no-lazy class="avatar" src="https://fastly.jsdelivr.net/gh/pizsd/blogimgs@latest/avatar.jpg" onerror="javascript:this.classList.add('error');this.src='https://fastly.jsdelivr.net/gh/cdn-x/placeholder@1.0.1/image/2659360.svg';"></a><a class="title" href="/"><div class="main">林曦</div><div class="sub cap">长年积累，偶然得之。</div></a></div>
-</header>
-
-
 
       
 
-  
-  <div class='nav-wrap'>
-  <nav class='sub post cap'>
-    
-      <a href='/'>近期发布</a>
-    
-    
-    
-    
-      
-        <a class='active' href='/archives'>归档</a>
-      
-    
-  </nav>
-</div>
+<div class="bread-nav fs12"><div id="breadcrumb"><a class="cap breadcrumb" href="/">主页</a><span class="sep"></span><a class="cap breadcrumb" href="/">文章</a></div><div id="post-meta">发布于&nbsp;<time datetime="2023-12-12T02:20:12.721Z">2023-12-12</time></div></div>
 
-  <div class='post-list'>
-  	
-  	
-  		
-  		
-  			
-  		
-  	
-  		
-  		
-  	
-  		
-  		
-  	
-  		
-  		
-  			
-  		
-  	
-  		
-  		
-  	
-  		
-  		
-  	
-  		
-  		
-  	
-  		
-  		
-  	
-  		
-  		
-  	
-  		
-  		
-  	
-  		
-  		
-  	
-  		
-  		
-  	
-  		
-  		
-  	
-  		
-  		
-  	
-  		
-  		
-  	
-  		
-  		
-  	
-  		
-  		
-  	
-  	
-  		<article class='' id='archive'>
-  			<div class='archive-header h4'>2023</div>
-  			
-  				
-  		    
-  				
-  		    
-  				
-  		    
-  				
-  		    
-  				
-  		    
-  				
-  		    
-  				
-  		    
-  				
-  		    
-  				
-  		    
-  				
-  		    
-  				
-  		    
-  				
-  		    
-  				
-  		    
-  				
-  		    
-  				
-  		    
-  				
-  		    
-  				
-  		    
-  				<div class='archive-list'>
-            <a class='post fs14' href="/2023/12/12/mysql_idx_ken_len/">
-    					<time>12-12</time>
-    					<span>
-                
-      						Mysql 中索引长度的计算方式
-      					
-              </span>
-    				</a>
-          </div>
-  			
-  				<div class='archive-list'>
-            <a class='post fs14' href="/2023/03/23/wps_number2test/">
-    					<time>03-23</time>
-    					<span>
-                
-      						WPS单元格中带单引号的数字字符串如何转换成不带引号的文本
-      					
-              </span>
-    				</a>
-          </div>
-  			
-  				<div class='archive-list'>
-            <a class='post fs14' href="/2023/01/17/php_grpc/">
-    					<time>01-17</time>
-    					<span>
-                
-      						PHP 实现gRPC
-      					
-              </span>
-    				</a>
-          </div>
-  			
-  		</article>
-  	
-  		<article class='' id='archive'>
-  			<div class='archive-header h4'>2022</div>
-  			
-  				
-  		    
-  				
-  		    
-  				
-  		    
-  				
-  		    
-  				
-  		    
-  				
-  		    
-  				
-  		    
-  				
-  		    
-  				
-  		    
-  				
-  		    
-  				
-  		    
-  				
-  		    
-  				
-  		    
-  				
-  		    
-  				
-  		    
-  				
-  		    
-  				
-  		    
-  				<div class='archive-list'>
-            <a class='post fs14' href="/2022/12/28/http_cors/">
-    					<time>12-28</time>
-    					<span>
-                
-      						http中的跨域资源共享（Cors）详解
-      					
-              </span>
-    				</a>
-          </div>
-  			
-  				<div class='archive-list'>
-            <a class='post fs14' href="/2022/12/28/charles_mac/">
-    					<time>12-28</time>
-    					<span>
-                
-      						macOS下的抓包工具Charles
-      					
-              </span>
-    				</a>
-          </div>
-  			
-  				<div class='archive-list'>
-            <a class='post fs14' href="/2022/11/13/js_vue_print-nb/">
-    					<time>11-13</time>
-    					<span>
-                
-      						Vue中使用vue-print-nb插件
-      					
-              </span>
-    				</a>
-          </div>
-  			
-  				<div class='archive-list'>
-            <a class='post fs14' href="/2022/11/04/php_ioc/">
-    					<time>11-04</time>
-    					<span>
-                
-      						终于看到一句话把控制反转(IoC)说的这么明白了
-      					
-              </span>
-    				</a>
-          </div>
-  			
-  				<div class='archive-list'>
-            <a class='post fs14' href="/2022/11/01/mysql_innodb_clustered_index/">
-    					<time>11-01</time>
-    					<span>
-                
-      						Mysql InnoDB中的聚簇索引
-      					
-              </span>
-    				</a>
-          </div>
-  			
-  				<div class='archive-list'>
-            <a class='post fs14' href="/2022/10/14/php_language1/">
-    					<time>10-14</time>
-    					<span>
-                
-      						关于PHP隐式类型转换的一些坑，还挺有意思
-      					
-              </span>
-    				</a>
-          </div>
-  			
-  				<div class='archive-list'>
-            <a class='post fs14' href="/2022/10/12/rime_add_options/">
-    					<time>10-12</time>
-    					<span>
-                
-      						Rime小狼毫输入法切换环境自动切换输入法
-      					
-              </span>
-    				</a>
-          </div>
-  			
-  				<div class='archive-list'>
-            <a class='post fs14' href="/2022/10/10/mobile_photography/">
-    					<time>10-10</time>
-    					<span>
-                
-      						学习手机摄影笔记(iPhone)
-      					
-              </span>
-    				</a>
-          </div>
-  			
-  				<div class='archive-list'>
-            <a class='post fs14' href="/2022/09/30/phpstrorm_hotkey/">
-    					<time>09-30</time>
-    					<span>
-                
-      						PhpStorm 插件+快捷键(不定期更新)
-      					
-              </span>
-    				</a>
-          </div>
-  			
-  				<div class='archive-list'>
-            <a class='post fs14' href="/2022/09/30/linux_ntp/">
-    					<time>09-30</time>
-    					<span>
-                
-      						NTP同步服务使用
-      					
-              </span>
-    				</a>
-          </div>
-  			
-  				<div class='archive-list'>
-            <a class='post fs14' href="/2022/09/30/macos_hotkey/">
-    					<time>09-30</time>
-    					<span>
-                
-      						macOS 命令行快捷键(比较常用)
-      					
-              </span>
-    				</a>
-          </div>
-  			
-  				<div class='archive-list'>
-            <a class='post fs14' href="/2022/09/30/mysql_filter_key/">
-    					<time>09-30</time>
-    					<span>
-                
-      						PHP 模拟mysql 执行过程中IndexKey提取过程
-      					
-              </span>
-    				</a>
-          </div>
-  			
-  				<div class='archive-list'>
-            <a class='post fs14' href="/2022/09/30/mac_iredis/">
-    					<time>09-30</time>
-    					<span>
-                
-      						mac Homebrew修改指定软件的版本
-      					
-              </span>
-    				</a>
-          </div>
-  			
-  				<div class='archive-list'>
-            <a class='post fs14' href="/2022/07/07/hello-world/">
-    					<time>07-07</time>
-    					<span>
-                
-      						Hello World
-      					
-              </span>
-    				</a>
-          </div>
-  			
-  		</article>
-  	
-  </div>
+<article class='content md post'>
+<h1 class="article-title"><span>Mysql 中索引长度的计算方式</span></h1>
+<p> Mysql 通过执行计划（explain）中的key_len(索引长度)来判断是否合理使用到联合索引，索引长度的计算方式</p>
+<span id="more"></span>
+
+<h3 id="key-len-的计算方式"><a href="#key-len-的计算方式" class="headerlink" title="key_len 的计算方式"></a>key_len 的计算方式</h3><p><code>key_len</code> 计算规则如下：</p>
+<ul>
+<li>字符串<ul>
+<li>char(n): n字节长度</li>
+<li>varchar(n): 如果是utf8编码, 则是3n + 2字节; 如果是utf8mb4编码, 则是4n + 2字节.</li>
+</ul>
+</li>
+<li>数值类型<ul>
+<li>TINYINT: 1字节</li>
+<li>SMALLINT: 2字节</li>
+<li>MEDIUMINT: 3字节</li>
+<li>INT: 4字节</li>
+<li>BIGINT: 8字节</li>
+</ul>
+</li>
+<li>时间类型<ul>
+<li>DATE: 3字节</li>
+<li>TIMESTAMP: 4字节</li>
+<li>DATETIME: 8字节</li>
+</ul>
+</li>
+<li>字段属性<ul>
+<li>NULL属性占用一个字节</li>
+<li>如果一个字段是NOT NULL的, 则没有此属性</li>
+</ul>
+</li>
+</ul>
+<h3 id="判断依据"><a href="#判断依据" class="headerlink" title="判断依据"></a>判断依据</h3><p>如果联合索引的实际长度 和执行计划中的 <code>key_len</code> 相等，则有可能用到联合索引的全部字段，否则用其中一个字段</p>
+
+
+<div class="article-footer reveal fs14"><section id="license"><div class="header"><span>许可协议</span></div><div class="body"><p>本文采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">署名-非商业性使用-相同方式共享 4.0 国际</a> 许可协议，转载请注明出处。</p>
+</div></section></div>
+
+</article>
+
+<div class="related-wrap reveal" id="read-next"><section class="header cap theme"><span>接下来阅读</span></section><section class="body fs14"><a id="next" href="/2023/03/23/wps_number2test/">WPS单元格中带单引号的数字字符串如何转换成不带引号的文本<span class="note">较早</span></a><div class="line"></div></section></div>
+
+
+
+
+
+
 
 
       
