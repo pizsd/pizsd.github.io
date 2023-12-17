@@ -63,7 +63,7 @@
 <div class="widget-wrap" id="markdown"><div class="widget-header cap dis-select"><span class="name">有朋自远方来，不亦乐乎👏🏻</span></div><div class="widget-body fs14"><p>这里是<code>PIZSD</code>的个人博客<br><strong>📖        内容</strong><br>记录工作，学习中遇到问题<br>希望对你有帮助。<br><strong>💡思考</strong><br>宇宙中所有星球都“悬浮”在太空中<br>到底是什么力量在支撑它们？</p>
 </div></div>
 
-<div class="widget-wrap" id="recent"><div class="widget-header cap dis-select"><span class="name">最近更新</span></div><div class="widget-body fs14"><div class="more-item"><a class="title" href="/2023/12/12/mysql_idx_ken_len/">Mysql 中索引长度的计算方式</a></div><div class="more-item"><a class="title" href="/2022/07/07/hello-world/">Hello World</a></div><div class="more-item"><a class="title" href="/2022/11/01/mysql_innodb_clustered_index/">Mysql InnoDB中的聚簇索引</a></div><div class="more-item"><a class="title" href="/2022/09/30/macos_hotkey/">macOS 命令行快捷键(比较常用)</a></div><div class="more-item"><a class="title" href="/2022/09/30/mac_iredis/">mac Homebrew修改指定软件的版本</a></div></div></div>
+<div class="widget-wrap" id="recent"><div class="widget-header cap dis-select"><span class="name">最近更新</span></div><div class="widget-body fs14"><div class="more-item"><a class="title" href="/2023/12/14/mysql_index_merge/">Mysql索引合并</a></div><div class="more-item"><a class="title" href="/2023/12/12/mysql_idx_ken_len/">Mysql 中索引长度的计算方式</a></div><div class="more-item"><a class="title" href="/2022/07/07/hello-world/">Hello World</a></div><div class="more-item"><a class="title" href="/2022/11/01/mysql_innodb_clustered_index/">Mysql InnoDB中的聚簇索引</a></div><div class="more-item"><a class="title" href="/2022/09/30/macos_hotkey/">macOS 命令行快捷键(比较常用)</a></div></div></div>
 </div>
 
 
@@ -97,7 +97,13 @@
   </nav>
 </div>
 
-  <div class="post-list post"><a class="post-card post " href="/2023/12/12/mysql_idx_ken_len/">
+  <div class="post-list post"><a class="post-card post " href="/2023/12/14/mysql_index_merge/">
+<article class="md"><h2 class="post-title">Mysql索引合并</h2><div class="excerpt"><p>概念MySQL 5.0 之前，一个表一次只能使用一个索引，无法同时使用多个索引分别进行条件扫描。但是从 5.1 版本开始，引入了索引合并（Index Merge）技术，对同一个表可以使用 多个索引分别进行条件扫描 ，然后将结果进行合并处理，最后再进行回表查询。
+索引合并优点&#x2F;缺点
+优点
+
+可以上一条sql预警使用多个索引进行扫描，然后对结果进行合并，减少不必要的回表次数，提高查询效...</p></div><div class="meta cap"><span class="cap" id="post-meta">发布于&nbsp;<time datetime="2023-12-14T04:23:29.046Z">2023-12-14</time></span></div></article>
+</a><a class="post-card post " href="/2023/12/12/mysql_idx_ken_len/">
 <article class="md"><h2 class="post-title">Mysql 中索引长度的计算方式</h2><div class="excerpt"><p> Mysql 通过执行计划（explain）中的key_len(索引长度)来判断是否合理使用到联合索引，索引长度的计算方式</p></div><div class="meta cap"><span class="cap" id="post-meta">发布于&nbsp;<time datetime="2023-12-12T02:20:12.721Z">2023-12-12</time></span></div></article>
 </a><a class="post-card post " href="/2023/03/23/wps_number2test/">
 <article class="md"><h2 class="post-title">WPS单元格中带单引号的数字字符串如何转换成不带引号的文本</h2><div class="excerpt"><p>WPS单元格中带单引号的数字字符串如何转换成不带引号的文本或者反向操作</p></div><div class="meta cap"><span class="cap" id="post-meta">发布于&nbsp;<time datetime="2023-03-23T10:53:15.046Z">2023-03-23</time></span></div></article>
@@ -115,9 +121,6 @@
 <article class="md"><div class="post-cover"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://fastly.jsdelivr.net/gh/pizsd/blogimgs@latest/posts/mysql_innodb_clustered_index_c.jpeg"/></div><h2 class="post-title">Mysql InnoDB中的聚簇索引</h2><div class="excerpt"><p> Mysql 中InnoDB存储引擎的聚簇索引结构和优化</p></div><div class="meta cap"><span class="cap" id="post-meta">发布于&nbsp;<time datetime="2022-11-01T10:39:20.783Z">2022-11-01</time></span></div></article>
 </a><a class="post-card post " href="/2022/10/14/php_language1/">
 <article class="md"><h2 class="post-title">关于PHP隐式类型转换的一些坑，还挺有意思</h2><div class="excerpt"><p>最进在对接国外国家支付的时候，验证签名是发现PHP隐式类型转换的坑，感觉还挺有意思，特分享出来，估计这种情况应该很少有人遇到吧</p></div><div class="meta cap"><span class="cap" id="post-meta">发布于&nbsp;<time datetime="2022-10-14T09:39:42.250Z">2022-10-14</time></span></div></article>
-</a><a class="post-card post " href="/2022/10/12/rime_add_options/">
-<article class="md"><h2 class="post-title">Rime小狼毫输入法切换环境自动切换输入法</h2><div class="excerpt"><p>问题以前在安装Rime-小狼毫输入法时，没太注意，输入法可以按照环境切换输入模式，导致后续遇到在 iTerm2 中无法输入中文，自带的命令行系统也无法输入
-解决在试了其他命令工具发现可以输入，很奇怪，经过一番折腾，最终确认是输入法配置的问题squirrel.custom.yaml 通过配置文件可以发现，当软件是iTerm2，系统自带命令 ascii_mode = true 也就是说在这些软件...</p></div><div class="meta cap"><span class="cap" id="post-meta">发布于&nbsp;<time datetime="2022-10-12T06:14:11.092Z">2022-10-12</time></span></div></article>
 </a></div>
   
   <div class='paginator-wrap dis-select'>
