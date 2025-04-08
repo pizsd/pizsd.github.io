@@ -18,18 +18,18 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="theme-color" content="#f8f8f8">
-  <title>Go：Map的声明与使用 - 林曦</title>
+  <title>Go：什么是栈帧（stack frame） - 林曦</title>
 
   
-    <meta name="description" content="声明 Map 声明使用 var 关键字  1var m map[string]string  使用 这里先提前说明一点，Map 在声明以后的初始值是空map ，是无法进行赋值操作的，否则编译报错 panic: assignment to entry in nil map，这里意思就是：给空 Map 赋值   需要先进行 make 进行内存分配才能进行赋值操作，Golang还有chan、map 以及">
+    <meta name="description" content="定义 🧱 一句话定义：函数的栈帧（stack frame）是函数在运行时在栈（stack）上分配的一块内存，用来保存：参数，返回值，局部变量，返回地址，可能还有调用者的一些上下文信息（如寄存器、defer 信息等）  🧠 为什么需要栈帧？当你调用一个函数时，程序需要一个临时的空间来处理这个函数的所有工作：  把参数传进去 处理内部变量 保存结果 返回之后还能回到调用处继续执行  这些工作都靠“">
 <meta property="og:type" content="website">
-<meta property="og:title" content="Map的声明与使用">
-<meta property="og:url" content="https://pizsd.github.io/wiki/go/go_map.html">
+<meta property="og:title" content="什么是栈帧（stack frame）">
+<meta property="og:url" content="https://pizsd.github.io/wiki/go/stack_frame.html">
 <meta property="og:site_name" content="林曦">
-<meta property="og:description" content="声明 Map 声明使用 var 关键字  1var m map[string]string  使用 这里先提前说明一点，Map 在声明以后的初始值是空map ，是无法进行赋值操作的，否则编译报错 panic: assignment to entry in nil map，这里意思就是：给空 Map 赋值   需要先进行 make 进行内存分配才能进行赋值操作，Golang还有chan、map 以及">
+<meta property="og:description" content="定义 🧱 一句话定义：函数的栈帧（stack frame）是函数在运行时在栈（stack）上分配的一块内存，用来保存：参数，返回值，局部变量，返回地址，可能还有调用者的一些上下文信息（如寄存器、defer 信息等）  🧠 为什么需要栈帧？当你调用一个函数时，程序需要一个临时的空间来处理这个函数的所有工作：  把参数传进去 处理内部变量 保存结果 返回之后还能回到调用处继续执行  这些工作都靠“">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2024-01-13T08:27:00.338Z">
-<meta property="article:modified_time" content="2023-11-17T03:53:04.461Z">
+<meta property="article:published_time" content="2025-04-08T07:23:19.987Z">
+<meta property="article:modified_time" content="2025-04-08T07:23:19.987Z">
 <meta property="article:author" content="pizsd">
 <meta property="article:tag" content="Go">
 <meta name="twitter:card" content="summary">
@@ -68,7 +68,7 @@
 
 <div class="widgets">
 
-<div class="widget-wrap multi" id="toc"><div class="widget-header cap dis-select"><span class="name">基础知识踩坑</span></div><div class="widget-body fs14"><div class="doc-tree"><a class="doc-tree-link" href="/wiki/go/index.html"><span class="toc-text">断言</span></a></div><div class="doc-tree"><a class="doc-tree-link" href="/wiki/go/go_tag.html"><span class="toc-text">那些“奇怪”的注释</span></a></div><div class="doc-tree active"><a class="doc-tree-link active" href="/wiki/go/go_map.html"><span class="toc-text">Map的声明与使用</span></a><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A3%B0%E6%98%8E"><span class="toc-text">声明</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8"><span class="toc-text">使用</span></a></li></ol></div><div class="doc-tree"><a class="doc-tree-link" href="/wiki/go/go_named_return_value.html"><span class="toc-text">命名返回值</span></a></div><div class="doc-tree"><a class="doc-tree-link" href="/wiki/go/go_array.html"><span class="toc-text">数组中的一些细节</span></a></div><div class="doc-tree"><a class="doc-tree-link" href="/wiki/go/go_fmt_printf.html"><span class="toc-text">fmt包中的printf()小技巧</span></a></div><div class="doc-tree"><a class="doc-tree-link" href="/wiki/go/go_test_benchmark.html"><span class="toc-text">基准测试</span></a></div><div class="doc-tree"><a class="doc-tree-link" href="/wiki/go/binary_sort_tree.html"><span class="toc-text">二叉排序树的插入&查找&删除</span></a></div><div class="doc-tree"><a class="doc-tree-link" href="/wiki/go/go_build_gcflags.html"><span class="toc-text">内存逃逸分析</span></a></div><div class="doc-tree"><a class="doc-tree-link" href="/wiki/go/go_interface_nil.html"><span class="toc-text">interface赋值为nil，类型变化</span></a></div><div class="doc-tree"><a class="doc-tree-link" href="/wiki/go/go_defer_execution_timing.html"><span class="toc-text">defer语句执行时机</span></a></div><div class="doc-tree"><a class="doc-tree-link" href="/wiki/go/go_interface_%20satisfaction_check.html"><span class="toc-text">接口满足度检查(interface satisfaction check)</span></a></div><div class="doc-tree"><a class="doc-tree-link" href="/wiki/go/go_defer_named_return.html"><span class="toc-text">defer&命名返回值和非命名返回值的区别</span></a></div><div class="doc-tree"><a class="doc-tree-link" href="/wiki/go/stack_frame.html"><span class="toc-text">什么是栈帧（stack frame）</span></a></div></div></div>
+<div class="widget-wrap multi" id="toc"><div class="widget-header cap dis-select"><span class="name">基础知识踩坑</span></div><div class="widget-body fs14"><div class="doc-tree"><a class="doc-tree-link" href="/wiki/go/index.html"><span class="toc-text">断言</span></a></div><div class="doc-tree"><a class="doc-tree-link" href="/wiki/go/go_tag.html"><span class="toc-text">那些“奇怪”的注释</span></a></div><div class="doc-tree"><a class="doc-tree-link" href="/wiki/go/go_map.html"><span class="toc-text">Map的声明与使用</span></a></div><div class="doc-tree"><a class="doc-tree-link" href="/wiki/go/go_named_return_value.html"><span class="toc-text">命名返回值</span></a></div><div class="doc-tree"><a class="doc-tree-link" href="/wiki/go/go_array.html"><span class="toc-text">数组中的一些细节</span></a></div><div class="doc-tree"><a class="doc-tree-link" href="/wiki/go/go_fmt_printf.html"><span class="toc-text">fmt包中的printf()小技巧</span></a></div><div class="doc-tree"><a class="doc-tree-link" href="/wiki/go/go_test_benchmark.html"><span class="toc-text">基准测试</span></a></div><div class="doc-tree"><a class="doc-tree-link" href="/wiki/go/binary_sort_tree.html"><span class="toc-text">二叉排序树的插入&查找&删除</span></a></div><div class="doc-tree"><a class="doc-tree-link" href="/wiki/go/go_build_gcflags.html"><span class="toc-text">内存逃逸分析</span></a></div><div class="doc-tree"><a class="doc-tree-link" href="/wiki/go/go_interface_nil.html"><span class="toc-text">interface赋值为nil，类型变化</span></a></div><div class="doc-tree"><a class="doc-tree-link" href="/wiki/go/go_defer_execution_timing.html"><span class="toc-text">defer语句执行时机</span></a></div><div class="doc-tree"><a class="doc-tree-link" href="/wiki/go/go_interface_%20satisfaction_check.html"><span class="toc-text">接口满足度检查(interface satisfaction check)</span></a></div><div class="doc-tree"><a class="doc-tree-link" href="/wiki/go/go_defer_named_return.html"><span class="toc-text">defer&命名返回值和非命名返回值的区别</span></a></div><div class="doc-tree active"><a class="doc-tree-link active" href="/wiki/go/stack_frame.html"><span class="toc-text">什么是栈帧（stack frame）</span></a><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9A%E4%B9%89"><span class="toc-text">定义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%A7%A0-%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E6%A0%88%E5%B8%A7%EF%BC%9F"><span class="toc-text">🧠 为什么需要栈帧？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%A7%A9-%E4%B8%BE%E4%B8%AA%E7%AE%80%E5%8D%95%E4%BE%8B%E5%AD%90"><span class="toc-text">🧩 举个简单例子</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%8E%AE-%E7%B1%BB%E6%AF%94%E4%B8%80%E4%B8%8B%E5%A5%BD%E7%90%86%E8%A7%A3%EF%BC%9A"><span class="toc-text">🎮 类比一下好理解：</span></a></li></ol></div></div></div>
 
 
 
@@ -84,39 +84,46 @@
 
   
   
-<div class="bread-nav fs12"><div id="breadcrumb"><a class="cap breadcrumb" id="home" href="/">主页</a><span class="sep"></span><a class="cap breadcrumb" id="menu" href="/wiki/">WIKI</a><span class="sep"></span><a class="cap breadcrumb" id="proj" href="/wiki/go/index.html">Golang</a></div><div id="post-meta">更新于&nbsp;<time datetime="2023-11-17T03:53:04.461Z">2023-11-17</time></div></div>
+<div class="bread-nav fs12"><div id="breadcrumb"><a class="cap breadcrumb" id="home" href="/">主页</a><span class="sep"></span><a class="cap breadcrumb" id="menu" href="/wiki/">WIKI</a><span class="sep"></span><a class="cap breadcrumb" id="proj" href="/wiki/go/index.html">Golang</a></div><div id="post-meta">更新于&nbsp;<time datetime="2025-04-08T07:23:19.987Z">2025-04-08</time></div></div>
 
   <article class='content md wiki'>
-  <h1 class="article-title"><span>Map的声明与使用</span></h1>
-  <h3 id="声明"><a href="#声明" class="headerlink" title="声明"></a>声明</h3><ul>
-<li><code>Map</code> 声明使用 <code>var</code> 关键字</li>
-</ul>
-<figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> m <span class="keyword">map</span>[<span class="type">string</span>]<span class="type">string</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h3><blockquote>
-<p>这里先提前说明一点，<code>Map</code> 在声明以后的初始值是空map ，是无法进行赋值操作的，否则编译报错 <code>panic: assignment to entry in nil map</code>，这里意思就是：给空 <code>Map</code> 赋值</p>
+  <h1 class="article-title"><span>什么是栈帧（stack frame）</span></h1>
+  <h3 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h3><blockquote>
+<p>🧱 一句话定义：<strong>函数的栈帧（stack frame）</strong>是函数在运行时在栈（stack）上分配的一块内存，用来保存：参数，返回值，局部变量，返回地址，可能还有调用者的一些上下文信息（如寄存器、defer 信息等）</p>
 </blockquote>
+<h3 id="🧠-为什么需要栈帧？"><a href="#🧠-为什么需要栈帧？" class="headerlink" title="🧠 为什么需要栈帧？"></a>🧠 为什么需要栈帧？</h3><p>当你调用一个函数时，程序需要一个临时的空间来处理这个函数的所有工作：</p>
 <ul>
-<li>需要先进行 <code>make</code> 进行内存分配才能进行赋值操作，Golang还有chan、map 以及 slice 这三种数据类型也许进行 <code>make</code> 进行分配内存</li>
+<li>把参数传进去</li>
+<li>处理内部变量</li>
+<li>保存结果</li>
+<li>返回之后还能回到调用处继续执行</li>
 </ul>
-<figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">m = <span class="built_in">make</span>(<span class="keyword">map</span>[<span class="type">string</span>]<span class="type">string</span>)</span><br><span class="line"><span class="comment">// 或者使用简短声明</span></span><br><span class="line">m1 := <span class="built_in">make</span>(<span class="keyword">map</span>[<span class="type">string</span>]<span class="type">string</span>)</span><br></pre></td></tr></table></figure>
+<p>这些工作都靠“栈帧”来完成。</p>
+<h3 id="🧩-举个简单例子"><a href="#🧩-举个简单例子" class="headerlink" title="🧩 举个简单例子"></a>🧩 举个简单例子</h3><figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">add</span><span class="params">(a, b <span class="type">int</span>)</span></span> <span class="type">int</span> &#123;</span><br><span class="line">    result := a + b</span><br><span class="line">    <span class="keyword">return</span> result</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<ul>
-<li>赋值</li>
-</ul>
-<figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">m[<span class="string">&quot;haha&quot;</span>] = <span class="string">&quot;haha&quot;</span></span><br></pre></td></tr></table></figure>
+<p>当你调用 add(2, 3) 时，栈帧大概会这样安排：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">main 函数栈帧</span><br><span class="line">    ↓</span><br><span class="line">调用 add(2, 3)</span><br><span class="line">    ↓</span><br><span class="line">-----------------------------</span><br><span class="line">| 返回地址（main中的下一行）|</span><br><span class="line">| 参数 b = 3                 |</span><br><span class="line">| 参数 a = 2                 |</span><br><span class="line">| 局部变量 result = 5        |</span><br><span class="line">| 返回值 = 5                 |</span><br><span class="line">-----------------------------</span><br><span class="line">    ↑</span><br><span class="line">return，返回 5</span><br><span class="line">    ↑</span><br><span class="line">sum := 5，继续执行</span><br></pre></td></tr></table></figure>
 
-<ul>
-<li>判断</li>
-</ul>
-<figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 判断键是否存在map中，如果存早将键值赋值给v，true赋值给ok，不存在正相反</span></span><br><span class="line"><span class="keyword">if</span> v, ok := m[<span class="string">&quot;haha&quot;</span>]; ok &#123;</span><br><span class="line">    fmt.Println(v, ok)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>每次调用 add，都会在栈顶开出这样一块独立的空间，函数运行完就销毁它（出栈）。</p>
+<h3 id="🎮-类比一下好理解："><a href="#🎮-类比一下好理解：" class="headerlink" title="🎮 类比一下好理解："></a>🎮 类比一下好理解：</h3><ol>
+<li><p>想象你去参加游戏闯关（函数调用）：</p>
+</li>
+<li><p>你每到一关（函数），门口会给你发一个背包（栈帧）。</p>
+</li>
+<li><p>背包里有你这关需要的东西（参数、变量、奖励等）。</p>
+</li>
+<li><p>通关时你交出背包（return），里面的奖励（返回值）就是你带出这关的东西。</p>
+</li>
+<li><p>如果你掉了东西（panic），工作人员会根据背包里的备份（defer）帮你收拾残局。</p>
+</li>
+</ol>
 
   
 
 
   </article>
   
-<div class="related-wrap reveal" id="read-next"><section class="header cap theme"><span>接下来阅读</span></section><section class="body fs14"><a id="next" href="/wiki/go/go_named_return_value.html">命名返回值<span class="note">下一篇</span></a><div class="line"></div><a id="prev" href="/wiki/go/go_tag.html">那些“奇怪”的注释<span class="note">上一篇</span></a></section></div>
+<br>
 
   
 
